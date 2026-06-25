@@ -1,0 +1,235 @@
+/* ============================================================
+   ЖК Shohin Plaza — design tokens (from design/ mockups)
+   Concept: «Воздух и доверие» (light green, mobile-first)
+   ============================================================ */
+:root {
+  /* Greens */
+  --g: #3B6D11;       /* primary green: buttons, accents */
+  --gm: #639922;      /* mid green: hover, progress, Available */
+  --gl: #EAF3DE;      /* light green: card/field/badge backgrounds */
+  --gd: #1a2e12;      /* dark green: headings, primary text */
+
+  /* Surfaces */
+  --cream: #f7f9f5;   /* page background */
+  --white: #ffffff;   /* cards, sheets, navbar */
+  --muted: #4a6330;   /* secondary text */
+  --border: #d4e6c5;  /* borders, dividers */
+
+  /* Status: Reserved (amber) */
+  --amber: #b87a00;
+  --amberl: #fff8e1;
+  --amberb: #f9c922;
+
+  /* Status: Sold (red) */
+  --red: #c0392b;
+  --redl: #fdecea;
+
+  /* Commercial (gray) */
+  --gray: #9e9e9e;
+  --grayl: #f5f5f5;
+  --grayd: #616161;
+
+  /* Validation */
+  --err: #d32f2f;
+  --errl: #fff3f3;
+
+  /* Geometry */
+  --r: 12px;          /* main radius */
+  --rs: 8px;          /* small radius */
+  --tab-h: 64px;      /* bottom tab bar height */
+  --topbar-h: 52px;
+
+  /* App column (mobile-first; centered on wider screens) */
+  --app-max: 480px;
+
+  font-family: 'Segoe UI', system-ui, Roboto, sans-serif;
+  color: var(--gd);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--cream);
+  color: var(--gd);
+  font-size: 16px;
+  min-height: 100svh;
+}
+
+button { font-family: inherit; }
+
+/* ── APP SHELL ──────────────────────────────────────────── */
+.app-shell {
+  max-width: var(--app-max);
+  margin: 0 auto;
+  min-height: 100svh;
+  background: var(--cream);
+  position: relative;
+}
+
+.app-main {
+  padding-bottom: var(--tab-h); /* keep content clear of the tab bar */
+  min-height: 100svh;
+}
+
+/* ── BOTTOM TAB BAR ─────────────────────────────────────── */
+.tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 400;
+  height: var(--tab-h);
+  max-width: var(--app-max);
+  margin: 0 auto;
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: stretch;
+}
+
+.tab {
+  flex: 1;
+  min-width: 44px;             /* touch target */
+  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--muted);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tab svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tab.active { color: var(--g); }
+
+.tab-label {
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 500;
+}
+
+.tab-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--g);
+}
+
+/* Flagship Chessboard tab — emphasized center slot */
+.tab.tab-flagship svg { width: 24px; height: 24px; stroke-width: 1.9; }
+
+/* ── CONTACTS MODAL (global overlay) ────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-sheet {
+  width: 100%;
+  max-width: var(--app-max);
+  background: var(--white);
+  border-radius: 20px 20px 0 0;
+  padding: 0 1.25rem calc(1.25rem + var(--tab-h));
+  max-height: 90svh;
+  overflow-y: auto;
+}
+
+.modal-handle {
+  width: 36px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 12px auto 16px;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gd);
+  margin-bottom: 4px;
+}
+
+.modal-sub {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.contact-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  background: var(--gl);
+  color: var(--gd);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.contact-btn svg { width: 22px; height: 22px; flex-shrink: 0; }
+
+.btn-secondary {
+  width: 100%;
+  padding: 13px;
+  margin-top: 6px;
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--muted);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* ── PLACEHOLDER PAGES (temporary) ──────────────────────── */
+.placeholder {
+  padding: 2rem 1.25rem;
+}
+
+.placeholder h1 {
+  font-size: 22px;
+  color: var(--gd);
+  margin-bottom: 8px;
+}
+
+.placeholder p { font-size: 15px; color: var(--muted); }
+
+/* Landing placeholder sections (anchors for tab-bar scroll) */
+.landing-section {
+  min-height: 60svh;
+  padding: 2.5rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.landing-section h2 {
+  font-size: 21px;
+  color: var(--gd);
+  margin-bottom: 8px;
+}
+
+.landing-section p { font-size: 15px; color: var(--muted); }

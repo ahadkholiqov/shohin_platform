@@ -1,0 +1,79 @@
+using System.ComponentModel.DataAnnotations;
+using plaza.Models;
+
+namespace plaza.DTOs
+{
+    // Lean item for the catalog list.
+    public record ApartmentListItemDto(
+        Guid Id,
+        string Block,
+        int Floor,
+        string Number,
+        int RoomsCount,
+        decimal TotalArea,
+        decimal TotalPrice,
+        ApartmentStatus Status,
+        bool IsPenthouse);
+
+    // Full detail for a single apartment page.
+    public record ApartmentDetailDto(
+        Guid Id,
+        string Block,
+        int Floor,
+        string Number,
+        int RoomsCount,
+        decimal TotalArea,
+        decimal PricePerSqm,
+        decimal TotalPrice,
+        ApartmentStatus Status,
+        string? FloorPlanImageUrl,
+        string? Description,
+        bool IsPenthouse);
+
+    // One cell in the chessboard grid.
+    public record ChessboardCellDto(
+        Guid Id,
+        string Number,
+        int RoomsCount,
+        decimal TotalArea,
+        decimal TotalPrice,
+        ApartmentStatus Status,
+        bool IsPenthouse);
+
+    // Chessboard grouped: Block -> Floor -> cells.
+    public record ChessboardFloorDto(int Floor, List<ChessboardCellDto> Apartments);
+
+    public record ChessboardBlockDto(string Block, List<ChessboardFloorDto> Floors);
+
+    // Admin create payload. No TotalPrice / IsPenthouse / timestamps (derived/server-set).
+    public class ApartmentCreateDto
+    {
+        [Required, RegularExpression("^[AB]$", ErrorMessage = "Block must be 'A' or 'B'.")]
+        public string Block { get; set; } = null!;
+
+        [Range(1, 17)]
+        public int Floor { get; set; }
+
+        [Required, MaxLength(20)]
+        public string Number { get; set; } = null!;
+
+        [Range(0, 20)]
+        public int RoomsCount { get; set; }
+
+        [Range(0.01, 9999.99)]
+        public decimal TotalArea { get; set; }
+
+        [Range(0.01, 9999999999.99)]
+        public decimal PricePerSqm { get; set; }
+
+        public ApartmentStatus Status { get; set; } = ApartmentStatus.Available;
+
+        [MaxLength(2048)]
+        public string? FloorPlanImageUrl { get; set; }
+
+        public string? Description { get; set; }
+    }
+
+    // Admin update payload (same shape).
+    public class ApartmentUpdateDto : ApartmentCreateDto { }
+}
