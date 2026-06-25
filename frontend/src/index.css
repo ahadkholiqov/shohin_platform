@@ -206,6 +206,20 @@ button { font-family: inherit; }
   cursor: pointer;
 }
 
+/* ── STATUS BADGE ───────────────────────────────────────── */
+.status-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.02em;
+}
+
+.status-available { background: var(--gl); color: var(--g); }
+.status-reserved { background: var(--amberl); color: var(--amber); }
+.status-sold { background: var(--redl); color: var(--red); }
+
 /* ── PLACEHOLDER PAGES (temporary) ──────────────────────── */
 .placeholder {
   padding: 2rem 1.25rem;
