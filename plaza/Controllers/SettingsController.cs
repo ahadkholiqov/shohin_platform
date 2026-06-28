@@ -25,6 +25,7 @@ namespace plaza.Controllers
 
             return Ok(new SettingsDto(
                 s.HeroTitle, s.ConstructionProgressDescription,
+                s.ConstructionProgressPercent, s.CompletionYear,
                 s.ContactPhone, s.WhatsAppLink, s.TelegramLink));
         }
 
@@ -42,6 +43,8 @@ namespace plaza.Controllers
 
             s.HeroTitle = dto.HeroTitle;
             s.ConstructionProgressDescription = dto.ConstructionProgressDescription;
+            s.ConstructionProgressPercent = dto.ConstructionProgressPercent;
+            s.CompletionYear = dto.CompletionYear;
             s.ContactPhone = dto.ContactPhone;
             s.WhatsAppLink = dto.WhatsAppLink;
             s.TelegramLink = dto.TelegramLink;

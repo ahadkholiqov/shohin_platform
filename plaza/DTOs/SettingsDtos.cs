@@ -5,6 +5,8 @@ namespace plaza.DTOs
     public record SettingsDto(
         string HeroTitle,
         string ConstructionProgressDescription,
+        int ConstructionProgressPercent,
+        string CompletionYear,
         string ContactPhone,
         string WhatsAppLink,
         string TelegramLink);
@@ -16,6 +18,12 @@ namespace plaza.DTOs
 
         [Required]
         public string ConstructionProgressDescription { get; set; } = null!;
+
+        [Range(0, 100)]
+        public int ConstructionProgressPercent { get; set; }
+
+        [Required, MaxLength(20)]
+        public string CompletionYear { get; set; } = null!;
 
         [Required, MaxLength(30)]
         public string ContactPhone { get; set; } = null!;

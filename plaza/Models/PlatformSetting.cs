@@ -7,6 +7,8 @@ namespace plaza.Models
 
         public string HeroTitle { get; set; } = null!;
         public string ConstructionProgressDescription { get; set; } = null!;
+        public int ConstructionProgressPercent { get; set; }
+        public string CompletionYear { get; set; } = null!;
         public string ContactPhone { get; set; } = null!;
         public string WhatsAppLink { get; set; } = null!;
         public string TelegramLink { get; set; } = null!;

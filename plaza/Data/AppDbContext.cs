@@ -131,6 +131,7 @@ namespace plaza.Data
 
                 e.Property(p => p.HeroTitle).IsRequired();
                 e.Property(p => p.ConstructionProgressDescription).HasColumnType("text").IsRequired();
+                e.Property(p => p.CompletionYear).HasMaxLength(20).IsRequired();
                 e.Property(p => p.ContactPhone).HasMaxLength(30).IsRequired();
                 e.Property(p => p.WhatsAppLink).IsRequired();
                 e.Property(p => p.TelegramLink).IsRequired();

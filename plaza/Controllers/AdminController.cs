@@ -35,6 +35,8 @@ namespace plaza.Controllers
                     HeroTitle = "Живите выше — ЖК Shohin Plaza",
                     ConstructionProgressDescription =
                         "Строительство идёт по графику. Готовность объекта — 45%, сдача в 2026 году.",
+                    ConstructionProgressPercent = 45,
+                    CompletionYear = "2026",
                     ContactPhone = "+992 92 777 77 77",
                     WhatsAppLink = "https://wa.me/992927777777",
                     TelegramLink = "https://t.me/shohinplaza",

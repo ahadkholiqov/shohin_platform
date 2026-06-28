@@ -55,6 +55,8 @@ export interface ChessboardBlock {
 export interface Settings {
   heroTitle: string
   constructionProgressDescription: string
+  constructionProgressPercent: number
+  completionYear: string
   contactPhone: string
   whatsAppLink: string
   telegramLink: string
