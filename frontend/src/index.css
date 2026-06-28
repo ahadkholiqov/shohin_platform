@@ -705,3 +705,128 @@ button { font-family: inherit; }
   font-weight: 600;
   margin-top: 8px;
 }
+
+/* ============================================================
+   CHESSBOARD (flagship) — building cross-section
+   ============================================================ */
+.cb-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(247, 249, 245, 0.97);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 1rem;
+}
+.cb-tabs { display: flex; gap: 8px; }
+.cb-tab {
+  flex: 1;
+  padding: 10px;
+  min-height: 44px;
+  border-radius: var(--rs);
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+}
+.cb-tab.active { background: var(--g); border-color: var(--g); color: #fff; font-weight: 600; }
+.cb-legend { display: flex; gap: 14px; margin-top: 10px; }
+.cb-leg { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
+.cb-dot { width: 10px; height: 10px; border-radius: 50%; }
+.cb-dot-available { background: var(--gm); }
+.cb-dot-reserved { background: #f9a825; }
+.cb-dot-sold { background: var(--gray); }
+
+/* Horizontal scroll container (cinema-seat pattern) */
+.cb-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 12px 0 1.5rem; }
+.cb-scroll::-webkit-scrollbar { height: 4px; }
+.cb-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.cb-rows { display: flex; flex-direction: column; gap: 6px; min-width: min-content; }
+
+.cb-row { display: flex; align-items: stretch; gap: 6px; padding-right: 1rem; }
+
+/* Sticky floor column — solid bg so cells don't bleed through on scroll */
+.cb-floor-label {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  width: 44px;
+  min-width: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream);
+  padding-left: 1rem;
+  box-sizing: content-box;
+}
+.cb-floor-num { font-size: 13px; font-weight: 700; color: var(--muted); line-height: 1; }
+.cb-floor-sub { font-size: 9px; color: var(--muted); opacity: 0.75; margin-top: 2px; }
+
+.cb-cells { display: flex; gap: 6px; flex: 1; }
+
+.cb-cell {
+  flex: 1 0 auto;
+  min-width: 64px;
+  min-height: 52px;
+  border-radius: var(--rs);
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
+.cb-cell:active { transform: scale(0.96); }
+.cb-cell-num { font-size: 12px; font-weight: 600; color: var(--gd); white-space: nowrap; }
+.cb-cell-meta { font-size: 10px; color: var(--muted); margin-top: 2px; white-space: nowrap; }
+
+.cb-cell-available { background: var(--gl); border-color: var(--gm); }
+.cb-cell-reserved { background: var(--amberl); border-color: var(--amberb); }
+.cb-cell-sold { background: var(--grayl); border-color: #e0e0e0; opacity: 0.85; }
+.cb-cell-sold .cb-cell-num { color: var(--grayd); }
+
+/* Penthouse — premium dark/gold look */
+.cb-row-penthouse .cb-floor-label { background: var(--gd); border-radius: var(--rs) 0 0 var(--rs); }
+.cb-row-penthouse .cb-floor-num { color: var(--amberb); }
+.cb-row-penthouse .cb-floor-sub { color: var(--amberb); opacity: 0.9; }
+.cb-cell-penthouse {
+  background: var(--gd);
+  border-color: var(--amberb);
+}
+.cb-cell-penthouse .cb-cell-num { color: var(--amberb); }
+.cb-cell-penthouse .cb-cell-meta { color: rgba(255, 255, 255, 0.6); }
+
+/* Commercial foundation */
+.cb-commercial-banner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 1rem 2px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--grayd);
+  background: var(--grayl);
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  align-self: flex-start;
+}
+.cb-commercial-banner svg { width: 13px; height: 13px; stroke: var(--grayd); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.cb-row-commercial .cb-floor-label .cb-floor-num,
+.cb-row-commercial .cb-floor-label .cb-floor-sub { color: var(--gray); }
+.cb-cell-commercial {
+  flex: 1 0 auto;
+  min-width: 64px;
+  min-height: 44px;
+  border-radius: var(--rs);
+  border: 1px solid #e0e0e0;
+  background: var(--grayl);
+  pointer-events: none;
+}
