@@ -1,14 +1,22 @@
 import type {
   ApartmentDetail,
   ApartmentFilters,
+  ApartmentInput,
   ApartmentListItem,
   ApplicationCreate,
+  ApplicationListItem,
+  ApplicationStatus,
   ChessboardBlock,
   GalleryItem,
+  GalleryItemInput,
   Settings,
+  SettingsInput,
 } from './types'
 
 const ADMIN_TOKEN_KEY = 'shohin_admin_token'
+
+// Dispatched when an admin request is rejected with 401 (token missing/expired).
+export const ADMIN_UNAUTHORIZED_EVENT = 'admin-unauthorized'
 
 export function getAdminToken(): string {
   return localStorage.getItem(ADMIN_TOKEN_KEY) ?? ''
@@ -16,6 +24,10 @@ export function getAdminToken(): string {
 
 export function setAdminToken(token: string): void {
   localStorage.setItem(ADMIN_TOKEN_KEY, token)
+}
+
+export function clearAdminToken(): void {
+  localStorage.removeItem(ADMIN_TOKEN_KEY)
 }
 
 export class ApiError extends Error {
@@ -47,6 +59,12 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
   })
 
   if (!res.ok) {
+    // An authenticated admin call rejected as 401 means the stored token is
+    // missing/expired — drop it and let the guard send the user to login.
+    if (admin && res.status === 401) {
+      clearAdminToken()
+      window.dispatchEvent(new Event(ADMIN_UNAUTHORIZED_EVENT))
+    }
     let message = `Запрос не выполнен (${res.status})`
     try {
       const data = await res.json()
@@ -90,10 +108,72 @@ export const api = {
   submitApplication: (payload: ApplicationCreate) =>
     request<{ id: string }>('/applications', { method: 'POST', body: payload }),
 
-  // ── Admin ──
+  // ── Admin: auth ──
+  // Verifies the token (token goes in the body, not the X-Admin-Token header).
+  login: (token: string) =>
+    request<{ success: boolean }>('/admin/login', { method: 'POST', body: { token } }),
+
+  // ── Admin: apartments ──
+  createApartment: (payload: ApartmentInput) =>
+    request<ApartmentDetail>('/admin/apartments', { method: 'POST', body: payload, admin: true }),
+
+  updateApartment: (id: string, payload: ApartmentInput) =>
+    request<void>(`/admin/apartments/${id}`, { method: 'PUT', body: payload, admin: true }),
+
+  deleteApartment: (id: string) =>
+    request<void>(`/admin/apartments/${id}`, { method: 'DELETE', admin: true }),
+
+  // ── Admin: applications ──
+  getAdminApplications: (status?: ApplicationStatus) =>
+    request<ApplicationListItem[]>(`/admin/applications${buildQuery({ status })}`, { admin: true }),
+
+  updateApplicationStatus: (id: string, status: ApplicationStatus) =>
+    request<void>(`/admin/applications/${id}/status`, { method: 'PUT', body: { status }, admin: true }),
+
+  // ── Admin: gallery ──
+  createGalleryItem: (payload: GalleryItemInput) =>
+    request<GalleryItem>('/admin/gallery', { method: 'POST', body: payload, admin: true }),
+
+  updateGalleryItem: (id: string, payload: GalleryItemInput) =>
+    request<void>(`/admin/gallery/${id}`, { method: 'PUT', body: payload, admin: true }),
+
+  deleteGalleryItem: (id: string) =>
+    request<void>(`/admin/gallery/${id}`, { method: 'DELETE', admin: true }),
+
+  // ── Admin: settings ──
+  updateSettings: (payload: SettingsInput) =>
+    request<void>('/admin/settings', { method: 'PUT', body: payload, admin: true }),
+
+  // ── Admin: seed (dev) ──
   seed: () =>
     request<{ apartmentsCreated: number; settingsCreated: boolean }>('/admin/seed', {
       method: 'POST',
       admin: true,
     }),
+
+  // ── Admin: file upload (multipart) ──
+  uploadFile: async (file: File): Promise<{ url: string }> => {
+    const form = new FormData()
+    form.append('file', file)
+    const res = await fetch('/api/admin/upload', {
+      method: 'POST',
+      headers: { 'X-Admin-Token': getAdminToken() }, // do NOT set Content-Type for FormData
+      body: form,
+    })
+    if (!res.ok) {
+      if (res.status === 401) {
+        clearAdminToken()
+        window.dispatchEvent(new Event(ADMIN_UNAUTHORIZED_EVENT))
+      }
+      let message = `Загрузка не выполнена (${res.status})`
+      try {
+        const data = await res.json()
+        message = data.error ?? message
+      } catch {
+        // keep default message
+      }
+      throw new ApiError(res.status, message)
+    }
+    return (await res.json()) as { url: string }
+  },
 }

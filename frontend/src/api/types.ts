@@ -86,3 +86,45 @@ export interface ApartmentFilters {
   minPrice?: number
   maxPrice?: number
 }
+
+// ── Admin write payloads ──
+export interface ApartmentInput {
+  block: string
+  floor: number
+  number: string
+  roomsCount: number
+  totalArea: number
+  pricePerSqm: number
+  status: ApartmentStatus
+  floorPlanImageUrl?: string | null
+  description?: string | null
+}
+
+export interface GalleryItemInput {
+  imageUrl: string
+  category: GalleryCategory
+  displayOrder: number
+}
+
+export interface SettingsInput {
+  heroTitle: string
+  constructionProgressDescription: string
+  constructionProgressPercent: number
+  completionYear: string
+  contactPhone: string
+  whatsAppLink: string
+  telegramLink: string
+}
+
+// Admin leads inbox row (GET /api/admin/applications).
+export interface ApplicationListItem {
+  id: string
+  name: string
+  phone: string
+  comment: string | null
+  apartmentId: string | null
+  apartmentNumber: string | null
+  apartmentBlock: string | null
+  createdAt: string
+  status: ApplicationStatus
+}
