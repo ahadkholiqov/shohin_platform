@@ -233,17 +233,260 @@ button { font-family: inherit; }
 
 .placeholder p { font-size: 15px; color: var(--muted); }
 
-/* Landing placeholder sections (anchors for tab-bar scroll) */
-.landing-section {
-  min-height: 60svh;
-  padding: 2.5rem 1.25rem;
-  border-bottom: 1px solid var(--border);
+/* Full-page loading / error state */
+.page-state {
+  min-height: 70svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 2rem;
+  color: var(--muted);
+  font-size: 15px;
 }
 
-.landing-section h2 {
-  font-size: 21px;
-  color: var(--gd);
+.page-state .btn-secondary { width: auto; padding: 11px 22px; }
+
+/* ============================================================
+   LANDING PAGE (scoped under .landing)
+   ============================================================ */
+.landing { background: var(--cream); line-height: 1.6; }
+.landing section { padding: 2.5rem 1.25rem; }
+
+.landing .sec-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   margin-bottom: 8px;
 }
+.landing .sec-title {
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--gd);
+  margin-bottom: 0.65rem;
+  line-height: 1.25;
+}
+.landing .sec-body { font-size: 15px; color: var(--muted); line-height: 1.7; }
 
-.landing-section p { font-size: 15px; color: var(--muted); }
+/* ── Hero ── */
+.landing .hero {
+  position: relative;
+  min-height: 92svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  padding: 0;
+}
+.landing .hero-bg { position: absolute; inset: 0; background: #c5dba8; }
+.landing .hero-bg svg { width: 100%; height: 100%; }
+.landing .hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(20, 40, 10, 0.88) 0%, rgba(20, 40, 10, 0.25) 55%, transparent 100%);
+}
+.landing .hero-content { position: relative; z-index: 2; padding: 2rem 1.25rem 2.25rem; }
+.landing .hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.13);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fff;
+  font-size: 11px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+  backdrop-filter: blur(6px);
+  letter-spacing: 0.04em;
+}
+.landing .hero-badge svg { width: 12px; height: 12px; stroke: #fff; fill: none; stroke-width: 2; }
+.landing .hero-title { font-size: clamp(26px, 7vw, 40px); font-weight: 700; color: #fff; line-height: 1.15; margin-bottom: 10px; }
+.landing .hero-sub { font-size: 14px; color: rgba(255, 255, 255, 0.78); margin-bottom: 22px; }
+.landing .hero-actions { display: flex; flex-direction: column; gap: 10px; }
+.landing .hero-stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+.landing .hstat-val { font-size: 22px; font-weight: 700; color: #fff; }
+.landing .hstat-lbl { font-size: 11px; color: rgba(255, 255, 255, 0.6); margin-top: 1px; }
+
+.btn-primary {
+  background: var(--gm);
+  color: #fff;
+  border: none;
+  padding: 15px 24px;
+  border-radius: var(--r);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+}
+.btn-outline {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  padding: 13px 24px;
+  border-radius: var(--r);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* ── About ── */
+.landing .about { background: var(--white); }
+.landing .adv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 1.25rem; }
+.landing .adv-card { background: var(--gl); border-radius: var(--r); padding: 14px 12px; border: 1px solid var(--border); }
+.landing .adv-card svg { width: 22px; height: 22px; stroke: var(--g); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 8px; }
+.landing .adv-title { font-size: 13px; font-weight: 600; color: var(--gd); margin-bottom: 3px; }
+.landing .adv-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* ── Infrastructure ── */
+.landing .infra { background: var(--cream); }
+.landing .map-ph {
+  background: var(--gl);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  height: 170px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  gap: 8px;
+}
+.landing .map-ph svg { width: 28px; height: 28px; stroke: var(--gm); fill: none; stroke-width: 1.5; stroke-linecap: round; }
+.landing .map-ph-lbl { font-size: 12px; color: var(--muted); }
+.landing .map-ph-sub { font-size: 11px; color: #a0b890; }
+.landing .infra-list { display: flex; flex-direction: column; gap: 11px; }
+.landing .infra-item { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--muted); }
+.landing .infra-item svg { width: 16px; height: 16px; stroke: var(--gm); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; margin-top: 3px; }
+
+/* ── Progress + Gallery ── */
+.landing .progress-sec { background: var(--white); }
+.landing .prog-bar-wrap { background: var(--gl); border-radius: 20px; height: 8px; margin: 12px 0 6px; overflow: hidden; border: 1px solid var(--border); }
+.landing .prog-bar { height: 100%; background: var(--gm); border-radius: 20px; }
+.landing .prog-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 1.25rem; }
+.landing .gal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 1rem; }
+.landing .gal-ph {
+  background: var(--gl);
+  border: 1px solid var(--border);
+  border-radius: var(--rs);
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.landing .gal-ph svg { width: 20px; height: 20px; stroke: var(--gm); fill: none; stroke-width: 1.5; stroke-linecap: round; }
+.landing .gal-ph-main { grid-column: span 2; aspect-ratio: 2 / 1; }
+
+/* ── Form section (dark) ── */
+.landing .form-sec { background: var(--gd); }
+.landing .form-sec .sec-label { color: rgba(255, 255, 255, 0.45); }
+.landing .form-sec .sec-title { color: #fff; }
+.landing .form-sec .sec-body { color: rgba(255, 255, 255, 0.6); }
+
+/* ── Footer ── */
+.landing-footer { background: var(--white); border-top: 1px solid var(--border); padding: 2rem 1.25rem 1.5rem; }
+.footer-logo { font-size: 17px; font-weight: 700; color: var(--gd); margin-bottom: 3px; }
+.footer-dev { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+.footer-addr { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--muted); margin-bottom: 1.5rem; }
+.footer-addr svg { width: 15px; height: 15px; stroke: var(--gm); fill: none; stroke-width: 2; stroke-linecap: round; flex-shrink: 0; margin-top: 2px; }
+.footer-contacts { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
+.footer-contact { display: flex; align-items: center; gap: 12px; padding: 13px 16px; border-radius: var(--r); border: 1px solid var(--border); background: var(--gl); text-decoration: none; }
+.footer-contact-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.footer-contact-icon svg { width: 20px; height: 20px; }
+.footer-contact-label { display: block; font-size: 13px; color: var(--muted); }
+.footer-contact-val { display: block; font-size: 14px; font-weight: 600; color: var(--gd); }
+.footer-copy { font-size: 11px; color: #a0b890; }
+.icon-wa { background: #25d366; }
+.icon-tg { background: #229ed9; }
+.icon-phone { background: var(--g); }
+
+/* ============================================================
+   LEAD FORM (reusable: light default, dark variant)
+   ============================================================ */
+.lead-form { display: flex; flex-direction: column; gap: 12px; margin-top: 1.25rem; }
+.form-field { position: relative; }
+.form-field svg {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 17px;
+  height: 17px;
+  stroke: var(--muted);
+  fill: none;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+.form-field svg.form-icon-top { top: 16px; transform: none; }
+.lead-form input,
+.lead-form textarea {
+  width: 100%;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px 16px 14px 42px;
+  font-size: 15px;
+  color: var(--gd);
+  outline: none;
+  font-family: inherit;
+  transition: border 0.15s;
+}
+.lead-form textarea { resize: none; height: 88px; }
+.lead-form input:focus,
+.lead-form textarea:focus { border-color: var(--gm); }
+.lead-form input.has-error,
+.lead-form textarea.has-error { border-color: var(--err); background: var(--errl); }
+.form-err { font-size: 12px; color: var(--err); margin-top: -6px; }
+.form-err-api { margin-top: 0; }
+.btn-submit {
+  background: var(--gm);
+  color: #fff;
+  border: none;
+  padding: 15px;
+  border-radius: var(--r);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-submit:disabled { opacity: 0.6; cursor: default; }
+.btn-submit svg { width: 18px; height: 18px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.form-note { font-size: 11px; color: var(--muted); text-align: center; }
+
+.lead-success { text-align: center; padding: 1.5rem 0.5rem; }
+.lead-success svg { width: 48px; height: 48px; stroke: var(--gm); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 12px; }
+.lead-success-title { font-size: 18px; font-weight: 700; color: var(--gd); margin-bottom: 6px; }
+.lead-success-sub { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+/* Dark variant — used inside the landing's dark form section */
+.lead-form.dark input,
+.lead-form.dark textarea {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+.lead-form.dark input::placeholder,
+.lead-form.dark textarea::placeholder { color: rgba(255, 255, 255, 0.3); }
+.lead-form.dark input:focus,
+.lead-form.dark textarea:focus { border-color: rgba(255, 255, 255, 0.45); }
+.lead-form.dark .form-field svg { stroke: rgba(255, 255, 255, 0.35); }
+.lead-form.dark .form-note { color: rgba(255, 255, 255, 0.28); }
+.lead-form.dark .lead-success-title { color: #fff; }
+.lead-form.dark .lead-success-sub { color: rgba(255, 255, 255, 0.7); }
+.lead-form.dark input.has-error,
+.lead-form.dark textarea.has-error { border-color: #ff8a80; background: rgba(255, 0, 0, 0.08); }
