@@ -82,6 +82,10 @@ export default function LandingPage() {
     )
   }
 
+  // Construction progress is admin-managed; fall back safely if missing.
+  const progressPercent = Math.max(0, Math.min(100, settings.constructionProgressPercent ?? 0))
+  const completionYear = settings.completionYear ?? ''
+
   return (
     <div className="landing">
       {/* ── HERO ── */}
@@ -203,11 +207,11 @@ export default function LandingPage() {
         <h2 className="sec-title">Строим. Контролируем. Сдаём в срок.</h2>
         <p className="sec-body">{settings.constructionProgressDescription}</p>
         <div className="prog-bar-wrap">
-          <div className="prog-bar" style={{ width: '45%' }} />
+          <div className="prog-bar" style={{ width: `${progressPercent}%` }} />
         </div>
         <div className="prog-meta">
-          <span>Готовность: 45%</span>
-          <span>Сдача: 2026</span>
+          <span>Готовность: {progressPercent}%</span>
+          {completionYear && <span>Сдача: {completionYear}</span>}
         </div>
         <div className="gal-grid">
           <div className="gal-ph gal-ph-main">
