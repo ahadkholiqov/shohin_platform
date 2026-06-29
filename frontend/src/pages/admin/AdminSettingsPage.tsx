@@ -59,6 +59,20 @@ export default function AdminSettingsPage() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
+
+    const required = [
+      form.heroTitle,
+      form.constructionProgressDescription,
+      form.completionYear,
+      form.contactPhone,
+      form.whatsAppLink,
+      form.telegramLink,
+    ]
+    if (required.some((v) => v.trim() === '')) {
+      setError('Заполните все обязательные поля.')
+      return
+    }
+
     setSaving(true)
     setError('')
     try {

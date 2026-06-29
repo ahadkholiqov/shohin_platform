@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { api } from '../api/client'
-import type { Settings } from '../api/types'
+import type { GalleryItem, Settings } from '../api/types'
 import { useUI, type LandingSection } from '../ui/UIContext'
 import HeroBuilding from '../components/HeroBuilding'
 import LeadForm from '../components/LeadForm'
@@ -25,6 +25,7 @@ export default function LandingPage() {
 
   const [settings, setSettings] = useState<Settings | null>(null)
   const [status, setStatus] = useState<LoadStatus>('loading')
+  const [gallery, setGallery] = useState<GalleryItem[]>([])
 
   const loadSettings = useCallback(async () => {
     setStatus('loading')
@@ -40,6 +41,14 @@ export default function LandingPage() {
   useEffect(() => {
     loadSettings()
   }, [loadSettings])
+
+  // Real gallery images (if any); falls back to static placeholders when empty.
+  useEffect(() => {
+    api
+      .getGallery()
+      .then(setGallery)
+      .catch(() => setGallery([]))
+  }, [])
 
   // Cross-page anchor scroll (e.g. Gallery tapped from another page).
   useEffect(() => {
@@ -85,6 +94,9 @@ export default function LandingPage() {
   // Construction progress is admin-managed; fall back safely if missing.
   const progressPercent = Math.max(0, Math.min(100, settings.constructionProgressPercent ?? 0))
   const completionYear = settings.completionYear ?? ''
+
+  // Real images sorted by display order; empty → static placeholders below.
+  const sortedGallery = [...gallery].sort((a, b) => a.displayOrder - b.displayOrder)
 
   return (
     <div className="landing">
@@ -214,21 +226,31 @@ export default function LandingPage() {
           {completionYear && <span>Сдача: {completionYear}</span>}
         </div>
         <div className="gal-grid">
-          <div className="gal-ph gal-ph-main">
-            <svg viewBox="0 0 24 24">
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-              <path d="m3 9 4-4 4 4 4-5 4 5" />
-              <circle cx="8.5" cy="6.5" r="1.5" />
-            </svg>
-          </div>
-          {[0, 1, 2, 3].map((i) => (
-            <div className="gal-ph" key={i}>
-              <svg viewBox="0 0 24 24">
-                <rect x="3" y="3" width="18" height="18" rx="2" />
-                <path d="m3 9 4-4 4 4 4-5 4 5" />
-              </svg>
-            </div>
-          ))}
+          {sortedGallery.length > 0 ? (
+            sortedGallery.map((g, i) => (
+              <div className={`gal-ph${i === 0 ? ' gal-ph-main' : ''}`} key={g.id}>
+                <img className="gal-img" src={g.imageUrl} alt="" />
+              </div>
+            ))
+          ) : (
+            <>
+              <div className="gal-ph gal-ph-main">
+                <svg viewBox="0 0 24 24">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <path d="m3 9 4-4 4 4 4-5 4 5" />
+                  <circle cx="8.5" cy="6.5" r="1.5" />
+                </svg>
+              </div>
+              {[0, 1, 2, 3].map((i) => (
+                <div className="gal-ph" key={i}>
+                  <svg viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <path d="m3 9 4-4 4 4 4-5 4 5" />
+                  </svg>
+                </div>
+              ))}
+            </>
+          )}
         </div>
       </section>
 

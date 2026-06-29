@@ -51,6 +51,7 @@ export default function AdminLogin() {
           <input
             id="admin-token"
             type="password"
+            required
             autoComplete="off"
             placeholder="••••••••••••••••"
             value={token}

@@ -98,6 +98,10 @@ export default function AdminGalleryPage() {
       setUploadError('Выберите файл.')
       return
     }
+    if (newOrder.trim() === '') {
+      setUploadError('Укажите порядок сортировки.')
+      return
+    }
     setSaving(true)
     setUploadError('')
     try {
@@ -203,6 +207,11 @@ export default function AdminGalleryPage() {
                       min={0}
                       defaultValue={item.displayOrder}
                       onBlur={(e) => {
+                        // Ignore an empty value (would otherwise save 0).
+                        if (e.target.value.trim() === '') {
+                          e.target.value = String(item.displayOrder)
+                          return
+                        }
                         const v = Number(e.target.value)
                         if (v !== item.displayOrder) updateItem(item, { displayOrder: v })
                       }}
@@ -248,7 +257,7 @@ export default function AdminGalleryPage() {
               <div className="admin-form-group">
                 <label className="admin-form-label">Файл *</label>
                 <div className="admin-upload-area">
-                  <input type="file" accept="image/*" onChange={onFile} />
+                  <input type="file" accept="image/*" required onChange={onFile} />
                   <svg viewBox="0 0 24 24">
                     <polyline points="16 16 12 12 8 16" />
                     <line x1="12" y1="12" x2="12" y2="21" />
@@ -271,6 +280,7 @@ export default function AdminGalleryPage() {
                   <label className="admin-form-label">Категория *</label>
                   <select
                     className="admin-form-input"
+                    required
                     value={newCategory}
                     onChange={(e) => setNewCategory(e.target.value as GalleryCategory)}
                   >
@@ -286,6 +296,7 @@ export default function AdminGalleryPage() {
                   <input
                     className="admin-form-input"
                     type="number"
+                    required
                     min={0}
                     value={newOrder}
                     onChange={(e) => setNewOrder(e.target.value)}
