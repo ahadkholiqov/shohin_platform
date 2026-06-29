@@ -1183,3 +1183,39 @@ button { font-family: inherit; }
 .admin-status-select.s-closed { background-color: #f1f1f1; color: var(--amuted); }
 .admin-status-note { font-size: 12px; color: var(--ahint); }
 .admin-status-note.saved { color: var(--gm); font-weight: 700; }
+
+/* ── Admin: gallery ── */
+.admin-gal-tabs { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
+.admin-gal-tab { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid var(--aborder-s); border-radius: var(--aradius); background: var(--awhite); font-size: 13px; color: var(--amuted); cursor: pointer; font-family: inherit; }
+.admin-gal-tab:hover { border-color: var(--gm); }
+.admin-gal-tab.active { background: var(--g); border-color: var(--g); color: #fff; }
+.admin-gal-tab-count { background: var(--abg); color: var(--amuted); font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 10px; }
+.admin-gal-tab.active .admin-gal-tab-count { background: rgba(255, 255, 255, 0.25); color: #fff; }
+
+.admin-gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.admin-photo-card { background: var(--awhite); border: 1px solid var(--aborder); border-radius: 8px; overflow: hidden; }
+.admin-photo-card:hover { box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08); }
+.admin-photo-thumb { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; background: var(--abg); }
+.admin-photo-body { padding: 10px 12px; }
+.admin-photo-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.admin-photo-cat { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; }
+.admin-photo-cat.cat-construction { background: #fff3cd; color: #856404; }
+.admin-photo-cat.cat-renders { background: var(--gl); color: var(--g); }
+.admin-photo-order { display: flex; align-items: center; gap: 6px; }
+.admin-photo-order-lbl { font-size: 11px; color: var(--ahint); }
+.admin-photo-order-input { width: 48px; border: 1px solid var(--aborder-s); border-radius: 4px; padding: 3px 6px; font-size: 12px; color: var(--atext); text-align: center; font-family: inherit; outline: none; }
+.admin-photo-order-input:focus { border-color: var(--gm); }
+.admin-photo-actions { display: flex; gap: 6px; }
+.admin-photo-cat-select { flex: 1; border: 1px solid var(--aborder-s); border-radius: 4px; padding: 5px 6px; font-size: 12px; color: var(--atext); background: var(--awhite); outline: none; font-family: inherit; cursor: pointer; }
+.admin-photo-cat-select:focus { border-color: var(--gm); }
+
+/* ── Admin: settings ── */
+.admin-settings { display: flex; flex-direction: column; gap: 16px; max-width: 640px; }
+.admin-card { background: var(--awhite); border: 1px solid var(--aborder); border-radius: 8px; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; }
+.admin-card-title { font-size: 14px; font-weight: 600; color: var(--atext); }
+.admin-progress-preview { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+.admin-progress-bar { flex: 1; height: 8px; background: var(--gl); border: 1px solid var(--aborder); border-radius: 20px; overflow: hidden; }
+.admin-progress-fill { height: 100%; background: var(--gm); border-radius: 20px; transition: width 0.15s; }
+.admin-progress-val { font-size: 14px; font-weight: 600; color: var(--g); white-space: nowrap; }
+.admin-save-bar { display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-top: 16px; max-width: 640px; }
+.admin-saved-note { font-size: 13px; font-weight: 600; color: var(--gm); }
