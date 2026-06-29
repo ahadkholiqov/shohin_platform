@@ -10,9 +10,14 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
-    // Dev-only: forward API calls to the .NET backend (http profile).
+    // Dev-only: forward API + uploaded media to the .NET backend (http profile).
     proxy: {
       '/api': {
+        target: 'http://localhost:5241',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/uploads': {
         target: 'http://localhost:5241',
         changeOrigin: true,
         secure: false,

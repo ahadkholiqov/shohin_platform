@@ -51,13 +51,13 @@ namespace plaza.DTOs
         [Required, RegularExpression("^[AB]$", ErrorMessage = "Block must be 'A' or 'B'.")]
         public string Block { get; set; } = null!;
 
-        [Range(1, 17)]
+        [Range(1, 17, ErrorMessage = "Floor must be between 1 and 17.")]
         public int Floor { get; set; }
 
         [Required, MaxLength(20)]
         public string Number { get; set; } = null!;
 
-        [Range(0, 20)]
+        [Range(1, 20, ErrorMessage = "RoomsCount must be between 1 and 20.")]
         public int RoomsCount { get; set; }
 
         [Range(0.01, 9999.99)]

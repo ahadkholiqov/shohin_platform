@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using plaza.Data;
 using plaza.DTOs;
 using plaza.Models;
+using plaza.Utils;
 
 namespace plaza.Controllers
 {
@@ -96,7 +97,7 @@ namespace plaza.Controllers
                 Id = Guid.NewGuid(),
                 Block = dto.Block,
                 Floor = dto.Floor,
-                Number = dto.Number,
+                Number = Homoglyphs.NormalizeToCyrillic(dto.Number.Trim()),
                 RoomsCount = dto.RoomsCount,
                 TotalArea = dto.TotalArea,
                 PricePerSqm = dto.PricePerSqm,
@@ -125,7 +126,7 @@ namespace plaza.Controllers
 
             apartment.Block = dto.Block;
             apartment.Floor = dto.Floor;
-            apartment.Number = dto.Number;
+            apartment.Number = Homoglyphs.NormalizeToCyrillic(dto.Number.Trim());
             apartment.RoomsCount = dto.RoomsCount;
             apartment.TotalArea = dto.TotalArea;
             apartment.PricePerSqm = dto.PricePerSqm;
