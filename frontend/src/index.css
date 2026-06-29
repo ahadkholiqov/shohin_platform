@@ -843,6 +843,10 @@ button { font-family: inherit; }
   --atext: #1a202c;
   --amuted: #4a5568;
   --ahint: #a0aec0;
+  --ablue: #185fa5;
+  --abluel: #e6f1fb;
+  --aamber: #b87a00;
+  --aamberl: #fff8e1;
   --aradius: 6px;
   --aheader-h: 52px;
   --asidebar-w: 200px;
@@ -1139,3 +1143,43 @@ button { font-family: inherit; }
   .admin-form-grid { grid-template-columns: 1fr; }
   .admin-span2 { grid-column: span 1; }
 }
+
+/* ── Admin: applications inbox ── */
+.admin-stat-pills { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.admin-stat-pill { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--aborder); background: var(--awhite); font-size: 12px; color: var(--amuted); }
+.admin-stat-pill strong { color: var(--atext); margin-left: 3px; }
+.admin-stat-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+.admin-table-apps td { vertical-align: middle; }
+.admin-td-date { color: var(--amuted); white-space: nowrap; font-size: 12px; }
+.admin-new-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--ablue); margin-right: 5px; vertical-align: 1px; }
+.admin-td-phone a { color: var(--ablue); text-decoration: none; white-space: nowrap; }
+.admin-td-phone a:hover { text-decoration: underline; }
+.admin-td-comment { color: var(--amuted); max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.admin-td-apt { font-family: ui-monospace, Consolas, monospace; font-size: 12px; background: var(--abg); padding: 2px 6px; border-radius: 4px; color: var(--gd); white-space: nowrap; }
+
+.admin-row-new td { background: #fffef5; }
+.admin-row-new:hover td { background: #fffce8; }
+
+.admin-status-wrap { display: inline-flex; align-items: center; gap: 6px; }
+.admin-status-select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 22px 4px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  outline: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 5px center;
+}
+.admin-status-select:disabled { opacity: 0.6; cursor: default; }
+.admin-status-select.s-new { background-color: var(--abluel); color: var(--ablue); }
+.admin-status-select.s-progress { background-color: var(--aamberl); color: var(--aamber); }
+.admin-status-select.s-closed { background-color: #f1f1f1; color: var(--amuted); }
+.admin-status-note { font-size: 12px; color: var(--ahint); }
+.admin-status-note.saved { color: var(--gm); font-weight: 700; }
