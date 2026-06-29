@@ -1,3 +1,5 @@
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using plaza.Data;
@@ -45,6 +47,21 @@ namespace plaza
                     policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             });
 
+            // Brute-force protection for the admin login: 5 attempts / 5 min per IP.
+            builder.Services.AddRateLimiter(options =>
+            {
+                options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+                options.AddPolicy("login-limit", httpContext =>
+                    RateLimitPartition.GetFixedWindowLimiter(
+                        partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                        factory: _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = 5,
+                            Window = TimeSpan.FromMinutes(5),
+                            QueueLimit = 0,
+                        }));
+            });
+
             var app = builder.Build();
 
             // Ensure the database and tables physically exist (MVP setup, no migrations yet).
@@ -79,6 +96,7 @@ namespace plaza
 
             // CORS first so preflight requests are handled before the admin guard.
             app.UseCors(DevCorsPolicy);
+            app.UseRateLimiter();
             app.UseMiddleware<AdminAuthMiddleware>();
             app.UseAuthorization();
             app.MapControllers();
