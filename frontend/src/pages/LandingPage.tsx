@@ -187,13 +187,22 @@ export default function LandingPage() {
       <section className="infra" id="infra">
         <div className="sec-label">Инфраструктура и локация</div>
         <h2 className="sec-title">Всё рядом</h2>
-        <div className="map-ph">
+        <div className="map-embed">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1207.7491079696397!2d69.58962031425011!3d40.29047839388525!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38b1b3c442017801%3A0x444ad5bc0dca68f6!2zN0hSUSs2VzMsINCl0YPQtNC20LDQvdC0LCDQotCw0LTQttC40LrQuNGB0YLQsNC9!5e0!3m2!1sru!2s!4v1782833200447!5m2!1sru!2s"
+            title="ЖК Shohin Plaza на карте"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+          />
+        </div>
+        <div className="map-caption">
           <svg viewBox="0 0 24 24">
             <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
             <circle cx="12" cy="10" r="3" />
           </svg>
-          <div className="map-ph-lbl">12-й микрорайон, Худжанд</div>
-          <div className="map-ph-sub">Место под Google Maps</div>
+          <span>г. Худжанд, 12-й микрорайон, напротив мечети Такво</span>
         </div>
         <div className="infra-list">
           {[
@@ -225,31 +234,23 @@ export default function LandingPage() {
           <span>Готовность: {progressPercent}%</span>
           {completionYear && <span>Сдача: {completionYear}</span>}
         </div>
-        <div className="gal-grid">
+        <div className="gal-carousel">
           {sortedGallery.length > 0 ? (
-            sortedGallery.map((g, i) => (
-              <div className={`gal-ph${i === 0 ? ' gal-ph-main' : ''}`} key={g.id}>
+            sortedGallery.map((g) => (
+              <div className="gal-slide" key={g.id}>
                 <img className="gal-img" src={g.imageUrl} alt="" />
               </div>
             ))
           ) : (
-            <>
-              <div className="gal-ph gal-ph-main">
+            [0, 1, 2, 3].map((i) => (
+              <div className="gal-slide gal-slide-empty" key={i}>
                 <svg viewBox="0 0 24 24">
                   <rect x="3" y="3" width="18" height="18" rx="2" />
                   <path d="m3 9 4-4 4 4 4-5 4 5" />
                   <circle cx="8.5" cy="6.5" r="1.5" />
                 </svg>
               </div>
-              {[0, 1, 2, 3].map((i) => (
-                <div className="gal-ph" key={i}>
-                  <svg viewBox="0 0 24 24">
-                    <rect x="3" y="3" width="18" height="18" rx="2" />
-                    <path d="m3 9 4-4 4 4 4-5 4 5" />
-                  </svg>
-                </div>
-              ))}
-            </>
+            ))
           )}
         </div>
       </section>
