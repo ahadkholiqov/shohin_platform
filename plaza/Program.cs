@@ -39,12 +39,15 @@ namespace plaza
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(connectionString));
 
-            // Permissive CORS for the development phase (React frontend on another origin).
+            // CORS only for the local Vite dev server (frontend on another origin).
+            // In production the SPA is served same-origin by this app, so CORS is bypassed.
             const string DevCorsPolicy = "DevCors";
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy(DevCorsPolicy, policy =>
-                    policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+                    policy.WithOrigins("http://localhost:5173")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
             });
 
             // Brute-force protection for the admin login: 5 attempts / 5 min per IP.
@@ -64,11 +67,11 @@ namespace plaza
 
             var app = builder.Build();
 
-            // Ensure the database and tables physically exist (MVP setup, no migrations yet).
+            // Apply any pending EF Core migrations on startup.
             using (var scope = app.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                db.Database.EnsureCreated();
+                db.Database.Migrate();
             }
 
             // Configure the HTTP request pipeline.
@@ -100,6 +103,11 @@ namespace plaza
             app.UseMiddleware<AdminAuthMiddleware>();
             app.UseAuthorization();
             app.MapControllers();
+
+            // Serve the SPA's index.html for any non-API, non-file route so client-side
+            // routing (e.g. /admin, /catalog) works on a hard refresh. Placed AFTER
+            // MapControllers so it never swallows real API 404s.
+            app.MapFallbackToFile("index.html");
 
             app.Run();
         }
