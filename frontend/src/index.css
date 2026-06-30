@@ -394,9 +394,43 @@ button { font-family: inherit; }
 .landing .gal-slide-empty { display: flex; align-items: center; justify-content: center; }
 .landing .gal-slide-empty svg { width: 22px; height: 22px; stroke: var(--gm); fill: none; stroke-width: 1.5; stroke-linecap: round; }
 .landing .gal-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.landing button.gal-slide { padding: 0; cursor: pointer; font: inherit; appearance: none; -webkit-appearance: none; }
 @media (min-width: 768px) {
   .landing .gal-slide { flex-basis: 42%; max-width: 360px; }
 }
+
+/* ── Lightbox (full-screen image viewer) ── */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.lightbox-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+}
+.lightbox-close {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.lightbox-close svg { width: 24px; height: 24px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; }
 
 /* ── Form section (dark) ── */
 .landing .form-sec { background: var(--gd); }

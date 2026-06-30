@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { api } from '../api/client'
 import type { GalleryItem, Settings } from '../api/types'
 import { useUI, type LandingSection } from '../ui/UIContext'
+import { useBackToClose } from '../hooks/useBackToClose'
 import HeroBuilding from '../components/HeroBuilding'
 import LeadForm from '../components/LeadForm'
 
@@ -26,6 +27,8 @@ export default function LandingPage() {
   const [settings, setSettings] = useState<Settings | null>(null)
   const [status, setStatus] = useState<LoadStatus>('loading')
   const [gallery, setGallery] = useState<GalleryItem[]>([])
+  const [lightboxUrl, setLightboxUrl] = useState<string | null>(null)
+  const closeLightbox = useCallback(() => setLightboxUrl(null), [])
 
   const loadSettings = useCallback(async () => {
     setStatus('loading')
@@ -75,6 +78,18 @@ export default function LandingPage() {
     }
     return () => observer.disconnect()
   }, [status, setActiveSection])
+
+  // Lightbox: hardware Back closes it, and the background scroll is locked while open.
+  useBackToClose(!!lightboxUrl, closeLightbox)
+
+  useEffect(() => {
+    if (!lightboxUrl) return
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previous
+    }
+  }, [lightboxUrl])
 
   if (status === 'loading') {
     return <div className="page-state">Загрузка…</div>
@@ -237,9 +252,15 @@ export default function LandingPage() {
         <div className="gal-carousel">
           {sortedGallery.length > 0 ? (
             sortedGallery.map((g) => (
-              <div className="gal-slide" key={g.id}>
+              <button
+                type="button"
+                className="gal-slide"
+                key={g.id}
+                onClick={() => setLightboxUrl(g.imageUrl)}
+                aria-label="Открыть фото на весь экран"
+              >
                 <img className="gal-img" src={g.imageUrl} alt="" />
-              </div>
+              </button>
             ))
           ) : (
             [0, 1, 2, 3].map((i) => (
@@ -313,6 +334,23 @@ export default function LandingPage() {
         </div>
         <div className="footer-copy">© 2025 Avrupo Sokhtmon. Все права защищены.</div>
       </footer>
+
+      {lightboxUrl && (
+        <div
+          className="lightbox"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeLightbox()
+          }}
+        >
+          <button type="button" className="lightbox-close" onClick={closeLightbox} aria-label="Закрыть">
+            <svg viewBox="0 0 24 24">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+          <img className="lightbox-img" src={lightboxUrl} alt="" />
+        </div>
+      )}
     </div>
   )
 }
