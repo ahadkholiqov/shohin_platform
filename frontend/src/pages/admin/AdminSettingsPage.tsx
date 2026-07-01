@@ -6,6 +6,7 @@ type LoadStatus = 'loading' | 'error' | 'ready'
 
 const EMPTY: SettingsInput = {
   heroTitle: '',
+  heroImageUrl: '',
   constructionProgressDescription: '',
   constructionProgressPercent: 0,
   completionYear: '',
@@ -20,6 +21,7 @@ export default function AdminSettingsPage() {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState('')
+  const [heroUploading, setHeroUploading] = useState(false)
 
   const load = useCallback(async () => {
     setStatus('loading')
@@ -27,6 +29,7 @@ export default function AdminSettingsPage() {
       const s = await api.getSettings()
       setForm({
         heroTitle: s.heroTitle,
+        heroImageUrl: s.heroImageUrl ?? '',
         constructionProgressDescription: s.constructionProgressDescription,
         constructionProgressPercent: s.constructionProgressPercent,
         completionYear: s.completionYear,
@@ -53,6 +56,22 @@ export default function AdminSettingsPage() {
   function setField<K extends keyof SettingsInput>(key: K, value: SettingsInput[K]) {
     setForm((f) => ({ ...f, [key]: value }))
     setSaved(false)
+  }
+
+  async function onHeroFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setHeroUploading(true)
+    setError('')
+    try {
+      const { url } = await api.uploadFile(file)
+      setField('heroImageUrl', url)
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'Не удалось загрузить изображение.')
+    } finally {
+      setHeroUploading(false)
+      e.target.value = '' // allow re-selecting the same file
+    }
   }
 
   const pct = Math.max(0, Math.min(100, Number(form.constructionProgressPercent) || 0))
@@ -132,6 +151,36 @@ export default function AdminSettingsPage() {
               value={form.constructionProgressDescription}
               onChange={(e) => setField('constructionProgressDescription', e.target.value)}
             />
+          </div>
+        </div>
+
+        {/* Изображение героя */}
+        <div className="admin-card">
+          <div className="admin-card-title">Фото главного экрана</div>
+          <div className="admin-form-group">
+            <label className="admin-form-label">Изображение героя (необязательно)</label>
+            {form.heroImageUrl ? (
+              <div className="admin-preview">
+                <img src={form.heroImageUrl} alt="Превью героя" />
+              </div>
+            ) : (
+              <div className="admin-page-sub" style={{ marginBottom: 10 }}>
+                Если не задано — на сайте показывается стандартная 3D-графика здания.
+              </div>
+            )}
+            <input type="file" accept="image/*" onChange={onHeroFile} disabled={heroUploading} />
+            <div className="admin-form-row" style={{ marginTop: 8 }}>
+              {heroUploading && <span className="admin-page-sub">Загрузка…</span>}
+              {form.heroImageUrl && !heroUploading && (
+                <button
+                  type="button"
+                  className="admin-btn-cancel"
+                  onClick={() => setField('heroImageUrl', '')}
+                >
+                  Убрать изображение
+                </button>
+              )}
+            </div>
           </div>
         </div>
 

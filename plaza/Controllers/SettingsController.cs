@@ -24,7 +24,7 @@ namespace plaza.Controllers
             if (s is null) return NotFound("Platform settings have not been configured yet.");
 
             return Ok(new SettingsDto(
-                s.HeroTitle, s.ConstructionProgressDescription,
+                s.HeroTitle, s.HeroImageUrl, s.ConstructionProgressDescription,
                 s.ConstructionProgressPercent, s.CompletionYear,
                 s.ContactPhone, s.WhatsAppLink, s.TelegramLink));
         }
@@ -42,6 +42,7 @@ namespace plaza.Controllers
             }
 
             s.HeroTitle = dto.HeroTitle;
+            s.HeroImageUrl = dto.HeroImageUrl;
             s.ConstructionProgressDescription = dto.ConstructionProgressDescription;
             s.ConstructionProgressPercent = dto.ConstructionProgressPercent;
             s.CompletionYear = dto.CompletionYear;

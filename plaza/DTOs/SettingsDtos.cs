@@ -4,6 +4,7 @@ namespace plaza.DTOs
 {
     public record SettingsDto(
         string HeroTitle,
+        string? HeroImageUrl,
         string ConstructionProgressDescription,
         int ConstructionProgressPercent,
         string CompletionYear,
@@ -15,6 +16,9 @@ namespace plaza.DTOs
     {
         [Required]
         public string HeroTitle { get; set; } = null!;
+
+        [MaxLength(2048)]
+        public string? HeroImageUrl { get; set; }
 
         [Required]
         public string ConstructionProgressDescription { get; set; } = null!;

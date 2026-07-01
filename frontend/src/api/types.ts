@@ -54,6 +54,7 @@ export interface ChessboardBlock {
 
 export interface Settings {
   heroTitle: string
+  heroImageUrl: string | null
   constructionProgressDescription: string
   constructionProgressPercent: number
   completionYear: string
@@ -108,6 +109,7 @@ export interface GalleryItemInput {
 
 export interface SettingsInput {
   heroTitle: string
+  heroImageUrl?: string | null
   constructionProgressDescription: string
   constructionProgressPercent: number
   completionYear: string

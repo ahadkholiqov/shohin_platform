@@ -118,7 +118,11 @@ export default function LandingPage() {
       {/* ── HERO ── */}
       <section className="hero" id="home">
         <div className="hero-bg">
-          <HeroBuilding />
+          {settings.heroImageUrl ? (
+            <img className="hero-photo" src={settings.heroImageUrl} alt="" />
+          ) : (
+            <HeroBuilding />
+          )}
         </div>
         <div className="hero-overlay" />
         <div className="hero-content">

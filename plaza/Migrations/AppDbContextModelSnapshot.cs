@@ -174,6 +174,9 @@ namespace plaza.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("character varying(30)");
 
+                    b.Property<string>("HeroImageUrl")
+                        .HasColumnType("text");
+
                     b.Property<string>("HeroTitle")
                         .IsRequired()
                         .HasColumnType("text");
