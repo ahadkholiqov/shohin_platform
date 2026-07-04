@@ -157,6 +157,9 @@ namespace plaza.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("integer");
 
+                    b.Property<string>("AmenitiesText")
+                        .HasColumnType("text");
+
                     b.Property<string>("CompletionYear")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -179,6 +182,9 @@ namespace plaza.Migrations
 
                     b.Property<string>("HeroTitle")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("InstallmentTerms")
                         .HasColumnType("text");
 
                     b.Property<string>("TelegramLink")

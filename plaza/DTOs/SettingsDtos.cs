@@ -8,6 +8,8 @@ namespace plaza.DTOs
         string ConstructionProgressDescription,
         int ConstructionProgressPercent,
         string CompletionYear,
+        string? InstallmentTerms,
+        string? AmenitiesText,
         string ContactPhone,
         string WhatsAppLink,
         string TelegramLink);
@@ -28,6 +30,12 @@ namespace plaza.DTOs
 
         [Required, MaxLength(20)]
         public string CompletionYear { get; set; } = null!;
+
+        [MaxLength(500)]
+        public string? InstallmentTerms { get; set; }
+
+        [MaxLength(1000)]
+        public string? AmenitiesText { get; set; }
 
         [Required, MaxLength(30)]
         public string ContactPhone { get; set; } = null!;

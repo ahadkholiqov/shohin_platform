@@ -58,6 +58,8 @@ export interface Settings {
   constructionProgressDescription: string
   constructionProgressPercent: number
   completionYear: string
+  installmentTerms: string | null
+  amenitiesText: string | null
   contactPhone: string
   whatsAppLink: string
   telegramLink: string
@@ -113,6 +115,8 @@ export interface SettingsInput {
   constructionProgressDescription: string
   constructionProgressPercent: number
   completionYear: string
+  installmentTerms?: string | null
+  amenitiesText?: string | null
   contactPhone: string
   whatsAppLink: string
   telegramLink: string

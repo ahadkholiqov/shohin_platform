@@ -113,6 +113,12 @@ export default function LandingPage() {
   // Real images sorted by display order; empty → static placeholders below.
   const sortedGallery = [...gallery].sort((a, b) => a.displayOrder - b.displayOrder)
 
+  // Admin-managed amenities: one item per line (items may contain commas).
+  const amenities = (settings.amenitiesText ?? '')
+    .split('\n')
+    .map((s) => s.trim())
+    .filter(Boolean)
+
   return (
     <div className="landing">
       {/* ── HERO ── */}
@@ -202,6 +208,28 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── РАССРОЧКА (sales hook) ── */}
+      {settings.installmentTerms && (
+        <section className="installment" id="installment">
+          <div className="install-card">
+            <div className="install-icon">
+              <svg viewBox="0 0 24 24">
+                <rect x="2" y="5" width="20" height="14" rx="2" />
+                <line x1="2" y1="10" x2="22" y2="10" />
+              </svg>
+            </div>
+            <div className="install-body">
+              <div className="install-label">Гибкая оплата</div>
+              <div className="install-title">Рассрочка от застройщика</div>
+              <p className="install-text">{settings.installmentTerms}</p>
+              <button className="install-cta" onClick={() => scrollToId('contacts')}>
+                Узнать условия
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ── ИНФРАСТРУКТУРА ── */}
       <section className="infra" id="infra">
         <div className="sec-label">Инфраструктура и локация</div>
@@ -223,22 +251,19 @@ export default function LandingPage() {
           </svg>
           <span>г. Худжанд, 12-й микрорайон, напротив мечети Такво</span>
         </div>
-        <div className="infra-list">
-          {[
-            'Напротив мечети «Taqvo» — знаковый ориентир района',
-            'Детские сады и школы — в шаговой доступности',
-            'Супермаркеты, аптеки, кафе — рядом с домом',
-            'Удобная транспортная развязка, выезд в центр',
-            'Благоустроенная территория и парковка',
-          ].map((text) => (
-            <div className="infra-item" key={text}>
-              <svg viewBox="0 0 24 24">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              <span>{text}</span>
-            </div>
-          ))}
-        </div>
+        {/* Fully admin-managed list (Settings → amenitiesText); hidden when empty. */}
+        {amenities.length > 0 && (
+          <div className="infra-list">
+            {amenities.map((text) => (
+              <div className="infra-item" key={text}>
+                <svg viewBox="0 0 24 24">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                <span>{text}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* ── ХОД СТРОИТЕЛЬСТВА + ГАЛЕРЕЯ ── */}

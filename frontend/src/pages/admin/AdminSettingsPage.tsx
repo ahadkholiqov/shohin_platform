@@ -10,6 +10,8 @@ const EMPTY: SettingsInput = {
   constructionProgressDescription: '',
   constructionProgressPercent: 0,
   completionYear: '',
+  installmentTerms: '',
+  amenitiesText: '',
   contactPhone: '',
   whatsAppLink: '',
   telegramLink: '',
@@ -33,6 +35,8 @@ export default function AdminSettingsPage() {
         constructionProgressDescription: s.constructionProgressDescription,
         constructionProgressPercent: s.constructionProgressPercent,
         completionYear: s.completionYear,
+        installmentTerms: s.installmentTerms ?? '',
+        amenitiesText: s.amenitiesText ?? '',
         contactPhone: s.contactPhone,
         whatsAppLink: s.whatsAppLink,
         telegramLink: s.telegramLink,
@@ -215,6 +219,36 @@ export default function AdminSettingsPage() {
               value={form.completionYear}
               onChange={(e) => setField('completionYear', e.target.value)}
             />
+          </div>
+        </div>
+
+        {/* Продажные хуки */}
+        <div className="admin-card">
+          <div className="admin-card-title">Продажные предложения</div>
+          <div className="admin-form-group">
+            <label className="admin-form-label">Условия рассрочки</label>
+            <textarea
+              className="admin-form-input"
+              rows={2}
+              style={{ resize: 'vertical' }}
+              placeholder="например: Рассрочка до 3 лет · Первоначальный взнос от 30%"
+              value={form.installmentTerms ?? ''}
+              onChange={(e) => setField('installmentTerms', e.target.value)}
+            />
+          </div>
+          <div className="admin-form-group">
+            <label className="admin-form-label">Удобства и инфраструктура дома</label>
+            <textarea
+              className="admin-form-input"
+              rows={6}
+              style={{ resize: 'vertical' }}
+              placeholder="Подземная парковка&#10;Видеонаблюдение 24/7&#10;Высокоскоростные лифты"
+              value={form.amenitiesText ?? ''}
+              onChange={(e) => setField('amenitiesText', e.target.value)}
+            />
+            <div className="admin-page-sub" style={{ marginTop: 6 }}>
+              Вводите каждый пункт с новой строки.
+            </div>
           </div>
         </div>
 

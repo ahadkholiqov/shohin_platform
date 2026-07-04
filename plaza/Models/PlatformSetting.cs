@@ -10,6 +10,11 @@ namespace plaza.Models
         public string ConstructionProgressDescription { get; set; } = null!;
         public int ConstructionProgressPercent { get; set; }
         public string CompletionYear { get; set; } = null!;
+
+        // Sales hooks (editable in admin; optional).
+        public string? InstallmentTerms { get; set; }
+        public string? AmenitiesText { get; set; }
+
         public string ContactPhone { get; set; } = null!;
         public string WhatsAppLink { get; set; } = null!;
         public string TelegramLink { get; set; } = null!;
