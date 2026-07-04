@@ -50,17 +50,44 @@ namespace plaza
                           .AllowAnyHeader());
             });
 
-            // Brute-force protection for the admin login: 5 attempts / 5 min per IP.
             builder.Services.AddRateLimiter(options =>
             {
                 options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-                options.AddPolicy("login-limit", httpContext =>
+
+                // Brute-force protection for the WHOLE admin surface (H2).
+                // A request carrying the valid admin token is never limited, so the
+                // single admin can work freely. Every unauthenticated /api/admin/*
+                // request — login attempts and token guesses against ANY admin route —
+                // is capped at 5 / 5 min per IP. This closes the "guess the token on a
+                // non-login endpoint" bypass and auto-covers future admin routes.
+                options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+                {
+                    if (!httpContext.Request.Path.StartsWithSegments("/api/admin"))
+                        return RateLimitPartition.GetNoLimiter("public");
+
+                    var expected = Environment.GetEnvironmentVariable("ADMIN_TOKEN");
+                    var provided = httpContext.Request.Headers[AdminAuthMiddleware.HeaderName].ToString();
+                    if (!string.IsNullOrEmpty(expected) && provided == expected)
+                        return RateLimitPartition.GetNoLimiter("admin-authenticated");
+
+                    var ip = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                    return RateLimitPartition.GetFixedWindowLimiter($"admin-guess:{ip}",
+                        _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = 5,
+                            Window = TimeSpan.FromMinutes(5),
+                            QueueLimit = 0,
+                        });
+                });
+
+                // Anti-spam for the public lead form (M1): 5 submissions / min per IP.
+                options.AddPolicy("public-submit-limit", httpContext =>
                     RateLimitPartition.GetFixedWindowLimiter(
                         partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
                         factory: _ => new FixedWindowRateLimiterOptions
                         {
                             PermitLimit = 5,
-                            Window = TimeSpan.FromMinutes(5),
+                            Window = TimeSpan.FromMinutes(1),
                             QueueLimit = 0,
                         }));
             });

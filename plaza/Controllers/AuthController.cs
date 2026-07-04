@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.RateLimiting;
 using plaza.DTOs;
 
 namespace plaza.Controllers
@@ -14,7 +13,6 @@ namespace plaza.Controllers
         // Verifies the admin token. The frontend stores it and sends it as
         // X-Admin-Token on subsequent admin calls (validated by AdminAuthMiddleware).
         [HttpPost("/api/admin/login")]
-        [EnableRateLimiting("login-limit")]
         public IActionResult Login(AdminLoginDto dto)
         {
             var expected = Environment.GetEnvironmentVariable("ADMIN_TOKEN");

@@ -12,6 +12,7 @@ namespace plaza.DTOs
         [Required, MaxLength(30)]
         public string Phone { get; set; } = null!;
 
+        [MaxLength(1000)]
         public string? Comment { get; set; }
 
         public Guid? ApartmentId { get; set; }

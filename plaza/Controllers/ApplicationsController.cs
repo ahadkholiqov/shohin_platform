@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using plaza.Data;
 using plaza.DTOs;
@@ -14,6 +15,7 @@ namespace plaza.Controllers
         public ApplicationsController(AppDbContext db) => _db = db;
 
         [HttpPost("/api/applications")]
+        [EnableRateLimiting("public-submit-limit")]
         public async Task<IActionResult> Submit(ApplicationCreateDto dto)
         {
             if (dto.ApartmentId.HasValue &&
