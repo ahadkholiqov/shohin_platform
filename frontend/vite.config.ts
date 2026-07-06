@@ -10,6 +10,8 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
+    // Dev-only: allow ngrok tunnels (rotating subdomains) to reach the dev server.
+    allowedHosts: ['.ngrok-free.app', '.ngrok-free.dev'],
     // Dev-only: forward API + uploaded media to the .NET backend (http profile).
     proxy: {
       '/api': {
