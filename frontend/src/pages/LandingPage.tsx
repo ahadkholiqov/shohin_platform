@@ -17,6 +17,17 @@ function telegramHandle(link: string): string {
   return link.replace(/^https?:\/\/t\.me\//, '@').replace(/\/$/, '')
 }
 
+// Extracts the number from a wa.me link and formats it for display.
+// "https://wa.me/992927777777" → "+992 92 777 77 77"; otherwise "+<digits>".
+function whatsAppNumber(link: string): string {
+  const digits = link.replace(/^https?:\/\/(www\.)?wa\.me\//, '').replace(/\D/g, '')
+  if (!digits) return link
+  if (digits.length === 12 && digits.startsWith('992')) {
+    return `+992 ${digits.slice(3, 5)} ${digits.slice(5, 8)} ${digits.slice(8, 10)} ${digits.slice(10, 12)}`
+  }
+  return `+${digits}`
+}
+
 type LoadStatus = 'loading' | 'error' | 'ready'
 
 export default function LandingPage() {
@@ -335,7 +346,7 @@ export default function LandingPage() {
             </span>
             <span>
               <span className="footer-contact-label">WhatsApp</span>
-              <span className="footer-contact-val">{settings.contactPhone}</span>
+              <span className="footer-contact-val">{whatsAppNumber(settings.whatsAppLink)}</span>
             </span>
           </a>
           <a className="footer-contact" href={settings.telegramLink} target="_blank" rel="noreferrer">
