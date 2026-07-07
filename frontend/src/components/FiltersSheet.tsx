@@ -29,7 +29,12 @@ type Props = {
 }
 
 const BLOCKS = ['A', 'B']
-const ROOMS = ['1', '2', '3', '4+']
+// This building only has 1- and 2-room units on standard floors, plus penthouses (17th).
+const ROOMS: { value: string; label: string }[] = [
+  { value: '1', label: '1' },
+  { value: '2', label: '2' },
+  { value: 'penthouse', label: 'Пентхаус' },
+]
 const STATUSES: { value: string; label: string }[] = [
   { value: 'Available', label: 'Свободна' },
   { value: 'Reserved', label: 'Бронь' },
@@ -74,12 +79,12 @@ export default function FiltersSheet({ open, initial, onApply, onClose }: Props)
         <div className="chip-row">
           {ROOMS.map((r) => (
             <button
-              key={r}
+              key={r.value}
               type="button"
-              className={`chip${draft.rooms === r ? ' active' : ''}`}
-              onClick={() => toggle('rooms', r)}
+              className={`chip${draft.rooms === r.value ? ' active' : ''}`}
+              onClick={() => toggle('rooms', r.value)}
             >
-              {r}
+              {r.label}
             </button>
           ))}
         </div>

@@ -23,20 +23,26 @@ export default function CatalogPage() {
   const load = useCallback(async (f: CatalogFilters) => {
     setStatus('loading')
     try {
+      const isPenthouse = f.rooms === 'penthouse'
+
       // Server-side filters supported by the API.
       const params: ApartmentFilters = {}
       if (f.block) params.block = f.block
-      if (f.rooms && f.rooms !== '4+') params.rooms = Number(f.rooms)
+      if (f.rooms && !isPenthouse) params.rooms = Number(f.rooms)
       if (f.status) params.status = f.status as ApartmentStatus
       if (f.minPrice) params.minPrice = Number(f.minPrice)
       if (f.maxPrice) params.maxPrice = Number(f.maxPrice)
 
       let list = await api.getApartments(params)
 
-      // Client-side refinements the API doesn't express (floor range, 4+ rooms).
-      if (f.rooms === '4+') list = list.filter((a) => a.roomsCount >= 4)
-      if (f.minFloor) list = list.filter((a) => a.floor >= Number(f.minFloor))
-      if (f.maxFloor) list = list.filter((a) => a.floor <= Number(f.maxFloor))
+      // Penthouse is a derived flag (floor 17), not a room count → filter client-side.
+      // Its floor is fixed, so the floor-range inputs are ignored while it's active.
+      if (isPenthouse) {
+        list = list.filter((a) => a.isPenthouse)
+      } else {
+        if (f.minFloor) list = list.filter((a) => a.floor >= Number(f.minFloor))
+        if (f.maxFloor) list = list.filter((a) => a.floor <= Number(f.maxFloor))
+      }
 
       setApartments(list)
       setStatus('ready')
@@ -62,7 +68,10 @@ export default function CatalogPage() {
   const tags: { label: string; keys: (keyof CatalogFilters)[] }[] = []
   if (filters.block) tags.push({ label: `Блок ${filters.block}`, keys: ['block'] })
   if (filters.rooms)
-    tags.push({ label: filters.rooms === '4+' ? '4+ комн.' : `${filters.rooms} комн.`, keys: ['rooms'] })
+    tags.push({
+      label: filters.rooms === 'penthouse' ? 'Пентхаус' : `${filters.rooms} комн.`,
+      keys: ['rooms'],
+    })
   if (filters.status) tags.push({ label: STATUS_RU[filters.status], keys: ['status'] })
   if (filters.minFloor || filters.maxFloor)
     tags.push({
