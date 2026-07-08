@@ -1,31 +1,17 @@
-import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react'
+import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import { api, ApiError } from '../../api/client'
-import type { GalleryCategory, GalleryItem } from '../../api/types'
+import type { GalleryItem } from '../../api/types'
 
 type LoadStatus = 'loading' | 'error' | 'ready'
-
-const CATEGORIES: { value: GalleryCategory; label: string; cls: string }[] = [
-  { value: 'Construction', label: 'Стройка', cls: 'cat-construction' },
-  { value: 'Renders', label: 'Рендеры', cls: 'cat-renders' },
-]
-
-function catLabel(c: GalleryCategory): string {
-  return CATEGORIES.find((x) => x.value === c)?.label ?? c
-}
-function catClass(c: GalleryCategory): string {
-  return CATEGORIES.find((x) => x.value === c)?.cls ?? 'cat-construction'
-}
 
 export default function AdminGalleryPage() {
   const [items, setItems] = useState<GalleryItem[]>([])
   const [status, setStatus] = useState<LoadStatus>('loading')
-  const [tab, setTab] = useState<'' | GalleryCategory>('')
 
   // Upload modal.
   const [uploadOpen, setUploadOpen] = useState(false)
   const [file, setFile] = useState<File | null>(null)
   const [previewSrc, setPreviewSrc] = useState<string | null>(null)
-  const [newCategory, setNewCategory] = useState<GalleryCategory>('Construction')
   const [newOrder, setNewOrder] = useState('10')
   const [saving, setSaving] = useState(false)
   const [uploadError, setUploadError] = useState('')
@@ -48,18 +34,7 @@ export default function AdminGalleryPage() {
     load()
   }, [load])
 
-  const counts = useMemo(() => {
-    const c = { Construction: 0, Renders: 0 }
-    for (const i of items) c[i.category] += 1
-    return c
-  }, [items])
-
-  const filtered = useMemo(
-    () => (tab ? items.filter((i) => i.category === tab) : items),
-    [items, tab],
-  )
-
-  // Inline edit (category / order) → PUT the whole item.
+  // Order edit → PUT the whole item (its stored category is preserved as-is).
   async function updateItem(item: GalleryItem, patch: Partial<GalleryItem>) {
     const next = { ...item, ...patch }
     setItems((list) => list.map((i) => (i.id === item.id ? next : i)))
@@ -77,7 +52,6 @@ export default function AdminGalleryPage() {
   function openUpload() {
     setFile(null)
     setPreviewSrc(null)
-    setNewCategory('Construction')
     setNewOrder('10')
     setUploadError('')
     setUploadOpen(true)
@@ -106,9 +80,11 @@ export default function AdminGalleryPage() {
     setUploadError('')
     try {
       const { url } = await api.uploadFile(file)
+      // The landing shows a single combined carousel, so category isn't surfaced in
+      // the admin UI — every upload is stored under a fixed category ('Renders').
       await api.createGalleryItem({
         imageUrl: url,
-        category: newCategory,
+        category: 'Renders',
         displayOrder: Number(newOrder) || 0,
       })
       setUploadOpen(false)
@@ -139,7 +115,7 @@ export default function AdminGalleryPage() {
       <div className="admin-page-header">
         <div>
           <div className="admin-page-title">Галерея</div>
-          <div className="admin-page-sub">Фотографии стройки и рендеры — отображаются на публичном сайте</div>
+          <div className="admin-page-sub">Фотографии проекта — отображаются на публичном сайте</div>
         </div>
         <button type="button" className="admin-add-btn" onClick={openUpload}>
           <svg viewBox="0 0 24 24">
@@ -147,26 +123,6 @@ export default function AdminGalleryPage() {
             <line x1="5" y1="12" x2="19" y2="12" />
           </svg>
           Добавить фото
-        </button>
-      </div>
-
-      <div className="admin-gal-tabs">
-        <button type="button" className={`admin-gal-tab${tab === '' ? ' active' : ''}`} onClick={() => setTab('')}>
-          Все <span className="admin-gal-tab-count">{items.length}</span>
-        </button>
-        <button
-          type="button"
-          className={`admin-gal-tab${tab === 'Construction' ? ' active' : ''}`}
-          onClick={() => setTab('Construction')}
-        >
-          Стройка <span className="admin-gal-tab-count">{counts.Construction}</span>
-        </button>
-        <button
-          type="button"
-          className={`admin-gal-tab${tab === 'Renders' ? ' active' : ''}`}
-          onClick={() => setTab('Renders')}
-        >
-          Рендеры <span className="admin-gal-tab-count">{counts.Renders}</span>
         </button>
       </div>
 
@@ -180,7 +136,7 @@ export default function AdminGalleryPage() {
         </div>
       )}
 
-      {status === 'ready' && filtered.length === 0 && (
+      {status === 'ready' && items.length === 0 && (
         <div className="admin-placeholder-box">
           <svg viewBox="0 0 24 24" style={{ width: 32, height: 32, stroke: 'var(--aborder)', fill: 'none', strokeWidth: 1.5 }}>
             <rect x="3" y="3" width="18" height="18" rx="2" />
@@ -191,14 +147,13 @@ export default function AdminGalleryPage() {
         </div>
       )}
 
-      {status === 'ready' && filtered.length > 0 && (
+      {status === 'ready' && items.length > 0 && (
         <div className="admin-gallery-grid">
-          {filtered.map((item) => (
+          {items.map((item) => (
             <div className="admin-photo-card" key={item.id}>
               <img className="admin-photo-thumb" src={item.imageUrl} alt="" />
               <div className="admin-photo-body">
                 <div className="admin-photo-meta">
-                  <span className={`admin-photo-cat ${catClass(item.category)}`}>{catLabel(item.category)}</span>
                   <span className="admin-photo-order">
                     <span className="admin-photo-order-lbl">Порядок</span>
                     <input
@@ -219,17 +174,6 @@ export default function AdminGalleryPage() {
                   </span>
                 </div>
                 <div className="admin-photo-actions">
-                  <select
-                    className="admin-photo-cat-select"
-                    value={item.category}
-                    onChange={(e) => updateItem(item, { category: e.target.value as GalleryCategory })}
-                  >
-                    {CATEGORIES.map((c) => (
-                      <option key={c.value} value={c.value}>
-                        {c.label}
-                      </option>
-                    ))}
-                  </select>
                   <button type="button" className="admin-btn-del" onClick={() => setToDelete(item)}>
                     Удалить
                   </button>
@@ -275,33 +219,16 @@ export default function AdminGalleryPage() {
                   </div>
                 )}
               </div>
-              <div className="admin-form-grid">
-                <div className="admin-form-group">
-                  <label className="admin-form-label">Категория *</label>
-                  <select
-                    className="admin-form-input"
-                    required
-                    value={newCategory}
-                    onChange={(e) => setNewCategory(e.target.value as GalleryCategory)}
-                  >
-                    {CATEGORIES.map((c) => (
-                      <option key={c.value} value={c.value}>
-                        {c.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="admin-form-group">
-                  <label className="admin-form-label">Порядок сортировки *</label>
-                  <input
-                    className="admin-form-input"
-                    type="number"
-                    required
-                    min={0}
-                    value={newOrder}
-                    onChange={(e) => setNewOrder(e.target.value)}
-                  />
-                </div>
+              <div className="admin-form-group">
+                <label className="admin-form-label">Порядок сортировки *</label>
+                <input
+                  className="admin-form-input"
+                  type="number"
+                  required
+                  min={0}
+                  value={newOrder}
+                  onChange={(e) => setNewOrder(e.target.value)}
+                />
               </div>
               {uploadError && <div className="admin-form-error">{uploadError}</div>}
             </div>
