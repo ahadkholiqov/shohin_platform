@@ -4,16 +4,16 @@
    ============================================================ */
 :root {
   /* Greens */
-  --g: #3B6D11;       /* primary green: buttons, accents */
-  --gm: #639922;      /* mid green: hover, progress, Available */
-  --gl: #EAF3DE;      /* light green: card/field/badge backgrounds */
-  --gd: #1a2e12;      /* dark green: headings, primary text */
+  --g: #3B6D11;
+  --gm: #639922;
+  --gl: #EAF3DE;
+  --gd: #1a2e12;
 
   /* Surfaces */
-  --cream: #f7f9f5;   /* page background */
-  --white: #ffffff;   /* cards, sheets, navbar */
-  --muted: #4a6330;   /* secondary text */
-  --border: #d4e6c5;  /* borders, dividers */
+  --cream: #f7f9f5;
+  --white: #ffffff;
+  --muted: #4a6330;
+  --border: #d4e6c5;
 
   /* Status: Reserved (amber) */
   --amber: #b87a00;
@@ -34,9 +34,9 @@
   --errl: #fff3f3;
 
   /* Geometry */
-  --r: 12px;          /* main radius */
-  --rs: 8px;          /* small radius */
-  --tab-h: 64px;      /* bottom tab bar height */
+  --r: 12px;
+  --rs: 8px;
+  --tab-h: 64px;
   --topbar-h: 52px;
 
   /* App column (mobile-first; centered on wider screens) */
@@ -69,7 +69,7 @@ button { font-family: inherit; }
 }
 
 .app-main {
-  padding-bottom: var(--tab-h); /* keep content clear of the tab bar */
+  padding-bottom: var(--tab-h);
   min-height: 100svh;
 }
 
@@ -91,7 +91,7 @@ button { font-family: inherit; }
 
 .tab {
   flex: 1;
-  min-width: 44px;             /* touch target */
+  min-width: 44px;
   min-height: 44px;
   display: flex;
   flex-direction: column;
@@ -823,16 +823,13 @@ button { font-family: inherit; }
 .cb-dot-reserved { background: #f9a825; }
 .cb-dot-sold { background: var(--gray); }
 
-/* Horizontal scroll container (cinema-seat pattern) */
 .cb-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 12px 0 1.5rem; }
 .cb-scroll::-webkit-scrollbar { height: 4px; }
 .cb-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-/* Compact grid: all 7 cells + floor label fit a 375px viewport, no h-scroll. */
 .cb-rows { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 
 .cb-row { display: flex; align-items: stretch; gap: 4px; padding-right: 8px; }
 
-/* Floor column — narrow so the 7 cells get the width. */
 .cb-floor-label {
   position: sticky;
   left: 0;
@@ -879,7 +876,6 @@ button { font-family: inherit; }
 .cb-cell-sold { background: var(--grayl); border-color: #e0e0e0; opacity: 0.85; }
 .cb-cell-sold .cb-cell-num { color: var(--grayd); }
 
-/* Penthouse — brand green (readable white text) */
 .cb-row-penthouse .cb-floor-label { background: var(--g); border-radius: var(--rs) 0 0 var(--rs); }
 .cb-row-penthouse .cb-floor-num { color: #fff; }
 .cb-row-penthouse .cb-floor-sub { color: #fff; opacity: 0.9; }

@@ -1,6 +1,5 @@
 namespace plaza.Models
 {
-    // Singleton configuration row. Always Id = 1.
     public class PlatformSetting
     {
         public int Id { get; set; }
@@ -11,7 +10,6 @@ namespace plaza.Models
         public int ConstructionProgressPercent { get; set; }
         public string CompletionYear { get; set; } = null!;
 
-        // Sales hooks (editable in admin; optional).
         public string? InstallmentTerms { get; set; }
         public string? AmenitiesText { get; set; }
 

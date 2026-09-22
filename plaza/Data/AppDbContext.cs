@@ -24,7 +24,6 @@ namespace plaza.Data
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
 
-        // Recompute TotalPrice and maintain timestamps for apartments on every save.
         private void ApplyApartmentRules()
         {
             var now = DateTimeOffset.UtcNow;
@@ -68,17 +67,13 @@ namespace plaza.Data
 
                 e.Property(a => a.Description).HasColumnType("text");
 
-                // IsPenthouse is a derived C# property; do not map it.
                 e.Ignore(a => a.IsPenthouse);
 
-                // Unique apartment identity within the complex.
                 e.HasIndex(a => new { a.Block, a.Number }).IsUnique();
 
-                // Chessboard / catalog filtering.
                 e.HasIndex(a => a.Status);
                 e.HasIndex(a => new { a.Block, a.Floor });
 
-                // Check constraints.
                 e.ToTable(t =>
                 {
                     t.HasCheckConstraint("CK_Apartment_Block", "\"Block\" IN ('A','B')");
@@ -126,7 +121,6 @@ namespace plaza.Data
             {
                 e.HasKey(p => p.Id);
 
-                // No identity generation: we control the single Id = 1.
                 e.Property(p => p.Id).ValueGeneratedNever();
 
                 e.Property(p => p.HeroTitle).IsRequired();

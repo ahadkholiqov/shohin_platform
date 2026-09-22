@@ -8,7 +8,6 @@ export default function AdminGalleryPage() {
   const [items, setItems] = useState<GalleryItem[]>([])
   const [status, setStatus] = useState<LoadStatus>('loading')
 
-  // Upload modal.
   const [uploadOpen, setUploadOpen] = useState(false)
   const [file, setFile] = useState<File | null>(null)
   const [previewSrc, setPreviewSrc] = useState<string | null>(null)
@@ -16,7 +15,6 @@ export default function AdminGalleryPage() {
   const [saving, setSaving] = useState(false)
   const [uploadError, setUploadError] = useState('')
 
-  // Delete confirm.
   const [toDelete, setToDelete] = useState<GalleryItem | null>(null)
   const [deleting, setDeleting] = useState(false)
 
@@ -34,7 +32,6 @@ export default function AdminGalleryPage() {
     load()
   }, [load])
 
-  // Order edit → PUT the whole item (its stored category is preserved as-is).
   async function updateItem(item: GalleryItem, patch: Partial<GalleryItem>) {
     const next = { ...item, ...patch }
     setItems((list) => list.map((i) => (i.id === item.id ? next : i)))
@@ -45,7 +42,7 @@ export default function AdminGalleryPage() {
         displayOrder: next.displayOrder,
       })
     } catch {
-      await load() // revert to server truth on failure
+      await load()
     }
   }
 
@@ -80,8 +77,6 @@ export default function AdminGalleryPage() {
     setUploadError('')
     try {
       const { url } = await api.uploadFile(file)
-      // The landing shows a single combined carousel, so category isn't surfaced in
-      // the admin UI — every upload is stored under a fixed category ('Renders').
       await api.createGalleryItem({
         imageUrl: url,
         category: 'Renders',
@@ -104,7 +99,6 @@ export default function AdminGalleryPage() {
       setToDelete(null)
       await load()
     } catch {
-      /* keep dialog open */
     } finally {
       setDeleting(false)
     }
@@ -162,7 +156,6 @@ export default function AdminGalleryPage() {
                       min={0}
                       defaultValue={item.displayOrder}
                       onBlur={(e) => {
-                        // Ignore an empty value (would otherwise save 0).
                         if (e.target.value.trim() === '') {
                           e.target.value = String(item.displayOrder)
                           return

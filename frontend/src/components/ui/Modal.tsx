@@ -8,9 +8,7 @@ type ModalProps = {
   children: ReactNode
 }
 
-// Reusable bottom-sheet overlay.
-// - Locks body scroll while open (prevents nested-scroll jitter on mobile).
-// - Hardware Back closes it (via useBackToClose).
+
 export default function Modal({ open, onClose, title, children }: ModalProps) {
   useBackToClose(open, onClose)
 

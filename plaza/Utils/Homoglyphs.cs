@@ -2,11 +2,6 @@ namespace plaza.Utils
 {
     public static class Homoglyphs
     {
-        // Apartment numbers are entered in Russian, but managers often switch keyboard
-        // layouts and type Latin look-alike letters (e.g. Latin "A-301" vs Cyrillic
-        // "А-301"). Normalizing Latin look-alikes to their Cyrillic equivalents makes
-        // such mix-ups collapse to the same value, so the unique (Block, Number) index
-        // correctly rejects duplicates.
         public static string NormalizeToCyrillic(string value)
         {
             return value

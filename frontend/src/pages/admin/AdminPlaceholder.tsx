@@ -1,4 +1,3 @@
-// Temporary content for admin pages until each is built in later Phase 5 steps.
 export default function AdminPlaceholder({ title, sub }: { title: string; sub: string }) {
   return (
     <div>

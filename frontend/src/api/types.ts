@@ -1,5 +1,3 @@
-// TypeScript mirrors of the backend DTOs (plaza/DTOs).
-// Enums are string unions — the API serializes them as strings.
 
 export type ApartmentStatus = 'Available' | 'Reserved' | 'Sold'
 export type ApplicationStatus = 'New' | 'InProgress' | 'Closed'
@@ -72,7 +70,6 @@ export interface GalleryItem {
   displayOrder: number
 }
 
-// Public lead capture (POST /api/applications).
 export interface ApplicationCreate {
   name: string
   phone: string
@@ -80,7 +77,6 @@ export interface ApplicationCreate {
   apartmentId?: string | null
 }
 
-// Optional catalog filters (GET /api/apartments).
 export interface ApartmentFilters {
   block?: string
   floor?: number
@@ -122,7 +118,6 @@ export interface SettingsInput {
   telegramLink: string
 }
 
-// Admin leads inbox row (GET /api/admin/applications).
 export interface ApplicationListItem {
   id: string
   name: string

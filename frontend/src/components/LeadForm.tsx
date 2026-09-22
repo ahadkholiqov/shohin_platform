@@ -2,9 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { api, ApiError } from '../api/client'
 
 type LeadFormProps = {
-  // When submitted from an apartment, ties the lead to it; null for general inquiries.
   apartmentId?: string | null
-  // Dark variant for the landing's dark form section; light elsewhere (modals).
   dark?: boolean
   onSuccess?: () => void
 }

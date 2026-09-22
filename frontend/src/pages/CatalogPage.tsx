@@ -25,7 +25,6 @@ export default function CatalogPage() {
     try {
       const isPenthouse = f.rooms === 'penthouse'
 
-      // Server-side filters supported by the API.
       const params: ApartmentFilters = {}
       if (f.block) params.block = f.block
       if (f.rooms && !isPenthouse) params.rooms = Number(f.rooms)
@@ -35,8 +34,6 @@ export default function CatalogPage() {
 
       let list = await api.getApartments(params)
 
-      // Penthouse is a derived flag (floor 17), not a room count → filter client-side.
-      // Its floor is fixed, so the floor-range inputs are ignored while it's active.
       if (isPenthouse) {
         list = list.filter((a) => a.isPenthouse)
       } else {
@@ -64,7 +61,6 @@ export default function CatalogPage() {
       return next
     })
 
-  // Active filter chips shown below the results bar.
   const tags: { label: string; keys: (keyof CatalogFilters)[] }[] = []
   if (filters.block) tags.push({ label: `Блок ${filters.block}`, keys: ['block'] })
   if (filters.rooms)

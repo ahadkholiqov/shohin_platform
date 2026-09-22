@@ -3,7 +3,6 @@ using plaza.Models;
 
 namespace plaza.DTOs
 {
-    // Lean item for the catalog list.
     public record ApartmentListItemDto(
         Guid Id,
         string Block,
@@ -15,7 +14,6 @@ namespace plaza.DTOs
         ApartmentStatus Status,
         bool IsPenthouse);
 
-    // Full detail for a single apartment page.
     public record ApartmentDetailDto(
         Guid Id,
         string Block,
@@ -30,7 +28,6 @@ namespace plaza.DTOs
         string? Description,
         bool IsPenthouse);
 
-    // One cell in the chessboard grid.
     public record ChessboardCellDto(
         Guid Id,
         string Number,
@@ -40,12 +37,10 @@ namespace plaza.DTOs
         ApartmentStatus Status,
         bool IsPenthouse);
 
-    // Chessboard grouped: Block -> Floor -> cells.
     public record ChessboardFloorDto(int Floor, List<ChessboardCellDto> Apartments);
 
     public record ChessboardBlockDto(string Block, List<ChessboardFloorDto> Floors);
 
-    // Admin create payload. No TotalPrice / IsPenthouse / timestamps (derived/server-set).
     public class ApartmentCreateDto
     {
         [Required, RegularExpression("^[AB]$", ErrorMessage = "Block must be 'A' or 'B'.")]
@@ -74,6 +69,5 @@ namespace plaza.DTOs
         public string? Description { get; set; }
     }
 
-    // Admin update payload (same shape).
     public class ApartmentUpdateDto : ApartmentCreateDto { }
 }

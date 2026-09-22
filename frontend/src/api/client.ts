@@ -15,7 +15,6 @@ import type {
 
 const ADMIN_TOKEN_KEY = 'shohin_admin_token'
 
-// Dispatched when an admin request is rejected with 401 (token missing/expired).
 export const ADMIN_UNAUTHORIZED_EVENT = 'admin-unauthorized'
 
 export function getAdminToken(): string {
@@ -59,8 +58,6 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
   })
 
   if (!res.ok) {
-    // An authenticated admin call rejected as 401 means the stored token is
-    // missing/expired — drop it and let the guard send the user to login.
     if (admin && res.status === 401) {
       clearAdminToken()
       window.dispatchEvent(new Event(ADMIN_UNAUTHORIZED_EVENT))
@@ -70,7 +67,6 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
       const data = await res.json()
       message = data.error ?? data.title ?? message
     } catch {
-      // response had no JSON body — keep the default message
     }
     throw new ApiError(res.status, message)
   }
@@ -109,7 +105,6 @@ export const api = {
     request<{ id: string }>('/applications', { method: 'POST', body: payload }),
 
   // ── Admin: auth ──
-  // Verifies the token (token goes in the body, not the X-Admin-Token header).
   login: (token: string) =>
     request<{ success: boolean }>('/admin/login', { method: 'POST', body: { token } }),
 
@@ -157,7 +152,7 @@ export const api = {
     form.append('file', file)
     const res = await fetch('/api/admin/upload', {
       method: 'POST',
-      headers: { 'X-Admin-Token': getAdminToken() }, // do NOT set Content-Type for FormData
+      headers: { 'X-Admin-Token': getAdminToken() },
       body: form,
     })
     if (!res.ok) {
@@ -170,7 +165,6 @@ export const api = {
         const data = await res.json()
         message = data.error ?? message
       } catch {
-        // keep default message
       }
       throw new ApiError(res.status, message)
     }

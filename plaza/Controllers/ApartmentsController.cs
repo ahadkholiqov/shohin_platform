@@ -57,8 +57,6 @@ namespace plaza.Controllers
             return dto is null ? NotFound() : Ok(dto);
         }
 
-        // Flagship endpoint: apartments are returned pre-grouped Block -> Floor -> cells
-        // so the mobile client can render the chessboard without client-side grouping.
         [HttpGet("chessboard")]
         public async Task<ActionResult<List<ChessboardBlockDto>>> GetChessboard()
         {
@@ -104,7 +102,6 @@ namespace plaza.Controllers
                 Status = dto.Status,
                 FloorPlanImageUrl = dto.FloorPlanImageUrl,
                 Description = dto.Description
-                // TotalPrice + timestamps set by AppDbContext on save.
             };
 
             _db.Apartments.Add(apartment);
@@ -133,7 +130,6 @@ namespace plaza.Controllers
             apartment.Status = dto.Status;
             apartment.FloorPlanImageUrl = dto.FloorPlanImageUrl;
             apartment.Description = dto.Description;
-            // TotalPrice + UpdatedAt set by AppDbContext on save.
 
             await _db.SaveChangesAsync();
             return NoContent();

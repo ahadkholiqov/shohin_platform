@@ -2,9 +2,6 @@ import { useEffect } from 'react'
 import { Navigate, Outlet, useNavigate } from 'react-router-dom'
 import { ADMIN_UNAUTHORIZED_EVENT, getAdminToken } from '../../api/client'
 
-// Route guard for /admin/*. Redirects to login when there's no token, and
-// reacts to the global 'admin-unauthorized' event (fired by the API client on
-// a 401) by sending the user back to login.
 export default function RequireAdmin() {
   const navigate = useNavigate()
   const hasToken = getAdminToken().length > 0

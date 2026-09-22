@@ -30,7 +30,6 @@ namespace plaza.Controllers
                 s.ContactPhone, s.WhatsAppLink, s.TelegramLink));
         }
 
-        // Upserts the single settings row (Id = 1).
         [HttpPut("/api/admin/settings")]
         public async Task<IActionResult> Update(SettingsUpdateDto dto)
         {

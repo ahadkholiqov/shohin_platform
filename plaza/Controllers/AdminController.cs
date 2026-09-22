@@ -12,8 +12,6 @@ namespace plaza.Controllers
 
         public AdminController(AppDbContext db) => _db = db;
 
-        // Populates an empty database with demo data for UI testing.
-        // Idempotent: skips apartments/settings that already exist.
         [HttpPost("/api/admin/seed")]
         public async Task<IActionResult> Seed()
         {
@@ -62,13 +60,6 @@ namespace plaza.Controllers
             return Ok(new { apartmentsCreated, settingsCreated });
         }
 
-        // TotalPrice, IsPenthouse, and timestamps are derived by AppDbContext on save.
-        // Generates a full realistic building for chessboard stress-testing:
-        //   Blocks A & B, floors 3-17.
-        //   - Floors 3-16: 7 apartments each (4× 1-room @ 45 m², 3× 2-room @ 65 m²), 6180 TJS/m².
-        //   - Floor 17:    2 penthouses (4-room @ 120 m²), 6800 TJS/m².
-        //   Status is randomized (Available/Reserved/Sold) so the board looks colorful.
-        //   Total = 2 blocks × (14 floors × 7 + 2) = 200 apartments.
         private static List<Apartment> BuildSeedApartments()
         {
             var rng = new Random();
@@ -77,12 +68,11 @@ namespace plaza.Controllers
 
             foreach (var block in new[] { "A", "B" })
             {
-                // Regular floors: 3..16, seven apartments per floor.
                 for (var floor = 3; floor <= 16; floor++)
                 {
                     for (var seq = 1; seq <= 7; seq++)
                     {
-                        var isOneRoom = seq <= 4; // first 4 are 1-room, last 3 are 2-room
+                        var isOneRoom = seq <= 4;
                         apartments.Add(new Apartment
                         {
                             Id = Guid.NewGuid(),
@@ -97,7 +87,6 @@ namespace plaza.Controllers
                     }
                 }
 
-                // Penthouse floor 17: two 4-room apartments.
                 for (var seq = 1; seq <= 2; seq++)
                 {
                     apartments.Add(new Apartment

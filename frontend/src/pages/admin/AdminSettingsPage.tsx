@@ -43,7 +43,6 @@ export default function AdminSettingsPage() {
       })
       setStatus('ready')
     } catch (err) {
-      // 404 = settings not configured yet → show empty form, not an error.
       if (err instanceof ApiError && err.status === 404) {
         setForm(EMPTY)
         setStatus('ready')
@@ -74,7 +73,7 @@ export default function AdminSettingsPage() {
       setError(err instanceof ApiError ? err.message : 'Не удалось загрузить изображение.')
     } finally {
       setHeroUploading(false)
-      e.target.value = '' // allow re-selecting the same file
+      e.target.value = ''
     }
   }
 
@@ -158,7 +157,7 @@ export default function AdminSettingsPage() {
           </div>
         </div>
 
-        {/* Изображение героя */}
+        {/* Изображение hero */}
         <div className="admin-card">
           <div className="admin-card-title">Фото главного экрана</div>
           <div className="admin-form-group">

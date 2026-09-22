@@ -3,7 +3,6 @@ using plaza.Models;
 
 namespace plaza.DTOs
 {
-    // Public lead capture.
     public class ApplicationCreateDto
     {
         [Required, MaxLength(150)]
@@ -18,7 +17,6 @@ namespace plaza.DTOs
         public Guid? ApartmentId { get; set; }
     }
 
-    // Admin inbox row.
     public record ApplicationListItemDto(
         Guid Id,
         string Name,
@@ -30,7 +28,6 @@ namespace plaza.DTOs
         DateTimeOffset CreatedAt,
         ApplicationStatus Status);
 
-    // Admin status change.
     public class ApplicationStatusUpdateDto
     {
         [Required]

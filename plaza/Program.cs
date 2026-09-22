@@ -13,7 +13,6 @@ namespace plaza
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Load .env from the solution/workspace root (one level above the project).
             var envPath = Path.Combine(builder.Environment.ContentRootPath, "..", ".env");
             DotNetEnv.Env.Load(envPath);
 
@@ -22,25 +21,20 @@ namespace plaza
 
             var connectionString = BuildNpgsqlConnectionString(databaseUrl);
 
-            // Add services to the container.
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
                 {
-                    // Serialize enums as their string names ("Available"), not integers.
                     options.JsonSerializerOptions.Converters.Add(
                         new System.Text.Json.Serialization.JsonStringEnumConverter());
                 });
             builder.Services.AddOpenApi();
 
-            // Map known DB exceptions (e.g. unique violations) to clean HTTP responses.
             builder.Services.AddExceptionHandler<DbExceptionHandler>();
             builder.Services.AddProblemDetails();
 
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(connectionString));
 
-            // CORS only for the local Vite dev server (frontend on another origin).
-            // In production the SPA is served same-origin by this app, so CORS is bypassed.
             const string DevCorsPolicy = "DevCors";
             builder.Services.AddCors(options =>
             {
@@ -54,12 +48,6 @@ namespace plaza
             {
                 options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
-                // Brute-force protection for the WHOLE admin surface (H2).
-                // A request carrying the valid admin token is never limited, so the
-                // single admin can work freely. Every unauthenticated /api/admin/*
-                // request — login attempts and token guesses against ANY admin route —
-                // is capped at 5 / 5 min per IP. This closes the "guess the token on a
-                // non-login endpoint" bypass and auto-covers future admin routes.
                 options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
                 {
                     if (!httpContext.Request.Path.StartsWithSegments("/api/admin"))
@@ -80,7 +68,6 @@ namespace plaza
                         });
                 });
 
-                // Anti-spam for the public lead form (M1): 5 submissions / min per IP.
                 options.AddPolicy("public-submit-limit", httpContext =>
                     RateLimitPartition.GetFixedWindowLimiter(
                         partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
@@ -94,14 +81,12 @@ namespace plaza
 
             var app = builder.Build();
 
-            // Apply any pending EF Core migrations on startup.
             using (var scope = app.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                 db.Database.Migrate();
             }
 
-            // Configure the HTTP request pipeline.
             app.UseExceptionHandler();
 
             if (app.Environment.IsDevelopment())
@@ -111,11 +96,8 @@ namespace plaza
 
             app.UseHttpsRedirection();
 
-            // Serve the compiled SPA and other static assets from wwwroot.
             app.UseStaticFiles();
 
-            // Serve admin-uploaded images from plaza/LocalUploads at /uploads.
-            // Kept outside wwwroot so frontend builds (emptyOutDir) never wipe them.
             var uploadsPath = Path.Combine(builder.Environment.ContentRootPath, "LocalUploads");
             Directory.CreateDirectory(uploadsPath);
             app.UseStaticFiles(new StaticFileOptions
@@ -124,22 +106,17 @@ namespace plaza
                 RequestPath = "/uploads",
             });
 
-            // CORS first so preflight requests are handled before the admin guard.
             app.UseCors(DevCorsPolicy);
             app.UseRateLimiter();
             app.UseMiddleware<AdminAuthMiddleware>();
             app.UseAuthorization();
             app.MapControllers();
 
-            // Serve the SPA's index.html for any non-API, non-file route so client-side
-            // routing (e.g. /admin, /catalog) works on a hard refresh. Placed AFTER
-            // MapControllers so it never swallows real API 404s.
             app.MapFallbackToFile("index.html");
 
             app.Run();
         }
 
-        // Converts a postgres://user:pass@host:port/dbname URL into an Npgsql connection string.
         private static string BuildNpgsqlConnectionString(string databaseUrl)
         {
             var uri = new Uri(databaseUrl);

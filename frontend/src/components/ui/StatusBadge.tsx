@@ -6,7 +6,6 @@ const LABELS: Record<ApartmentStatus, string> = {
   Sold: 'Продана',
 }
 
-// Color-coded apartment status pill.
 export default function StatusBadge({ status }: { status: ApartmentStatus }) {
   return <span className={`status-badge status-${status.toLowerCase()}`}>{LABELS[status]}</span>
 }

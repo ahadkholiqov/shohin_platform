@@ -7,16 +7,13 @@ import {
   type ReactNode,
 } from 'react'
 
-// Landing sub-sections the tab bar can highlight via scroll-spy.
 export type LandingSection = 'home' | 'gallery' | 'contacts'
 
 type UIContextValue = {
-  // Global Contacts modal (opened from Catalog/Chessboard).
   contactsOpen: boolean
   openContacts: () => void
   closeContacts: () => void
 
-  // Active landing section (for tab highlighting on '/').
   activeSection: LandingSection
   setActiveSection: (s: LandingSection) => void
 }

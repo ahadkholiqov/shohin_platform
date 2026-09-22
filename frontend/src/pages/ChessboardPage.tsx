@@ -5,8 +5,6 @@ import ApartmentModal from '../components/ApartmentModal'
 
 type LoadStatus = 'loading' | 'error' | 'ready'
 
-// Floors 1–2 are commercial — not in the apartments API; rendered statically
-// as the building's "foundation" at the bottom.
 const COMMERCIAL_FLOORS = [2, 1]
 
 function cellMeta(cell: ChessboardCell): string {
@@ -36,7 +34,6 @@ export default function ChessboardPage() {
 
   const blockKeys = blocks.map((b) => b.block)
 
-  // Keep the active tab valid once data arrives.
   useEffect(() => {
     if (blockKeys.length > 0 && !blockKeys.includes(activeBlock)) {
       setActiveBlock(blockKeys[0])

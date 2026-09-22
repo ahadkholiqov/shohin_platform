@@ -10,8 +10,6 @@ namespace plaza.Controllers
 
         public AuthController(IWebHostEnvironment env) => _env = env;
 
-        // Verifies the admin token. The frontend stores it and sends it as
-        // X-Admin-Token on subsequent admin calls (validated by AdminAuthMiddleware).
         [HttpPost("/api/admin/login")]
         public IActionResult Login(AdminLoginDto dto)
         {
@@ -37,7 +35,6 @@ namespace plaza.Controllers
             if (!allowed.Contains(ext))
                 return BadRequest("Unsupported file type. Allowed: jpg, jpeg, png, webp, gif.");
 
-            // Stored outside wwwroot so frontend builds (emptyOutDir) never wipe uploads.
             var uploadsDir = Path.Combine(_env.ContentRootPath, "LocalUploads");
             Directory.CreateDirectory(uploadsDir);
 

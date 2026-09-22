@@ -60,7 +60,6 @@ export default function AdminApplicationsPage() {
   async function changeStatus(app: ApplicationListItem, next: ApplicationStatus) {
     if (next === app.status) return
     const previous = app.status
-    // Optimistic update.
     setApps((list) => list.map((a) => (a.id === app.id ? { ...a, status: next } : a)))
     setSavingId(app.id)
     try {
@@ -69,7 +68,6 @@ export default function AdminApplicationsPage() {
       setSavedId(app.id)
       setTimeout(() => setSavedId((curr) => (curr === app.id ? null : curr)), 1500)
     } catch {
-      // Revert on failure.
       setApps((list) => list.map((a) => (a.id === app.id ? { ...a, status: previous } : a)))
       setSavingId(null)
     }

@@ -1,8 +1,5 @@
 namespace plaza.Middleware
 {
-    // Fail-safe admin guard: every /api/admin/* route requires the X-Admin-Token
-    // header to match ADMIN_TOKEN, with /api/admin/login as the only exception.
-    // Protection is by path prefix, so new admin routes are covered automatically.
     public class AdminAuthMiddleware
     {
         public const string HeaderName = "X-Admin-Token";

@@ -5,9 +5,6 @@ import { useUI } from '../ui/UIContext'
 import Modal from './ui/Modal'
 import { telegramHandle, whatsAppNumber } from '../utils/formatters'
 
-// Global contacts overlay opened from Catalog/Chessboard (decision #5).
-// Fetches live settings the first time it opens; real WhatsApp / Telegram / phone
-// come from GET /api/settings and are formatted the same way as the landing footer.
 const lineStyle = { display: 'flex', flexDirection: 'column' as const, lineHeight: 1.3 }
 
 export default function ContactsModal() {
@@ -15,7 +12,6 @@ export default function ContactsModal() {
   const [settings, setSettings] = useState<Settings | null>(null)
   const [status, setStatus] = useState<'loading' | 'error' | 'ready'>('loading')
 
-  // Fetch once, the first time the modal is opened (then cache in state).
   useEffect(() => {
     if (!contactsOpen || settings) return
     setStatus('loading')

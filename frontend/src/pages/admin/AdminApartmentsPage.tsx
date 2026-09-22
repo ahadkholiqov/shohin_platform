@@ -44,12 +44,10 @@ export default function AdminApartmentsPage() {
   const [apartments, setApartments] = useState<ApartmentListItem[]>([])
   const [status, setStatus] = useState<LoadStatus>('loading')
 
-  // Filters (client-side).
   const [search, setSearch] = useState('')
   const [blockFilter, setBlockFilter] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
 
-  // Edit/create modal.
   const [modalOpen, setModalOpen] = useState(false)
   const [modalLoading, setModalLoading] = useState(false)
   const [form, setForm] = useState<FormState>(emptyForm())
@@ -58,7 +56,6 @@ export default function AdminApartmentsPage() {
   const [saving, setSaving] = useState(false)
   const [formError, setFormError] = useState('')
 
-  // Delete confirmation.
   const [toDelete, setToDelete] = useState<ApartmentListItem | null>(null)
   const [deleting, setDeleting] = useState(false)
 
@@ -131,7 +128,6 @@ export default function AdminApartmentsPage() {
   async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
-    // Instant local preview, then upload to the server for the stored URL.
     const reader = new FileReader()
     reader.onload = (ev) => setPreviewSrc(ev.target?.result as string)
     reader.readAsDataURL(file)
@@ -208,7 +204,6 @@ export default function AdminApartmentsPage() {
       setToDelete(null)
       await load()
     } catch {
-      // keep the dialog open; surface a minimal message
     } finally {
       setDeleting(false)
     }

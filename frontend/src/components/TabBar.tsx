@@ -5,8 +5,6 @@ function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-// Context-aware bottom tab bar (see logic matrix).
-// 5 buttons: Главная · Каталог · Шахматка (flagship) · Галерея · Контакты
 export default function TabBar() {
   const navigate = useNavigate()
   const location = useLocation()
@@ -15,7 +13,6 @@ export default function TabBar() {
   const path = location.pathname
   const onLanding = path === '/'
 
-  // Active state per context.
   const isHome = onLanding && activeSection === 'home'
   const isCatalog = path === '/catalog'
   const isChessboard = path === '/chessboard'
@@ -34,7 +31,7 @@ export default function TabBar() {
 
   const goContacts = () => {
     if (onLanding) scrollToId('contacts')
-    else openContacts() // preserve the user's catalog/chessboard view
+    else openContacts()
   }
 
   return (

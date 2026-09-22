@@ -42,7 +42,6 @@ export default function LandingPage() {
     loadSettings()
   }, [loadSettings])
 
-  // Real gallery images (if any); falls back to static placeholders when empty.
   useEffect(() => {
     api
       .getGallery()
@@ -50,7 +49,6 @@ export default function LandingPage() {
       .catch(() => setGallery([]))
   }, [])
 
-  // Cross-page anchor scroll (e.g. Gallery tapped from another page).
   useEffect(() => {
     const target = (location.state as { scrollTo?: string } | null)?.scrollTo
     if (target && status === 'ready') {
@@ -58,7 +56,6 @@ export default function LandingPage() {
     }
   }, [location.state, status])
 
-  // Scroll-spy: report the visible section to the tab bar.
   useEffect(() => {
     if (status !== 'ready') return
     const observer = new IntersectionObserver(
@@ -76,7 +73,6 @@ export default function LandingPage() {
     return () => observer.disconnect()
   }, [status, setActiveSection])
 
-  // Lightbox: hardware Back closes it, and the background scroll is locked while open.
   useBackToClose(!!lightboxUrl, closeLightbox)
 
   useEffect(() => {
@@ -103,14 +99,11 @@ export default function LandingPage() {
     )
   }
 
-  // Construction progress is admin-managed; fall back safely if missing.
   const progressPercent = Math.max(0, Math.min(100, settings.constructionProgressPercent ?? 0))
   const completionYear = settings.completionYear ?? ''
 
-  // Real images sorted by display order; empty → static placeholders below.
   const sortedGallery = [...gallery].sort((a, b) => a.displayOrder - b.displayOrder)
 
-  // Admin-managed amenities: one item per line (items may contain commas).
   const amenities = (settings.amenitiesText ?? '')
     .split('\n')
     .map((s) => s.trim())
@@ -248,7 +241,6 @@ export default function LandingPage() {
           </svg>
           <span>г. Худжанд, 12-й микрорайон, напротив мечети Такво</span>
         </div>
-        {/* Fully admin-managed list (Settings → amenitiesText); hidden when empty. */}
         {amenities.length > 0 && (
           <div className="infra-list">
             {amenities.map((text) => (

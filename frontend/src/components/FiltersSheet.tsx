@@ -29,7 +29,6 @@ type Props = {
 }
 
 const BLOCKS = ['A', 'B']
-// This building only has 1- and 2-room units on standard floors, plus penthouses (17th).
 const ROOMS: { value: string; label: string }[] = [
   { value: '1', label: '1' },
   { value: '2', label: '2' },
@@ -44,12 +43,10 @@ const STATUSES: { value: string; label: string }[] = [
 export default function FiltersSheet({ open, initial, onApply, onClose }: Props) {
   const [draft, setDraft] = useState<CatalogFilters>(initial)
 
-  // Re-sync the draft to the applied filters each time the sheet opens.
   useEffect(() => {
     if (open) setDraft(initial)
   }, [open, initial])
 
-  // Single-select chips (clicking the active one clears it).
   const toggle = (key: keyof CatalogFilters, value: string) =>
     setDraft((d) => ({ ...d, [key]: d[key] === value ? '' : value }))
 

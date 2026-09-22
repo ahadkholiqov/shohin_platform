@@ -4,8 +4,6 @@ using Npgsql;
 
 namespace plaza.Middleware
 {
-    // Maps PostgreSQL unique-constraint violations to 409 Conflict.
-    // Any other exception is left to the default handler (returns false).
     public class DbExceptionHandler : IExceptionHandler
     {
         public async ValueTask<bool> TryHandleAsync(

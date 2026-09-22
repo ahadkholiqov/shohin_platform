@@ -15,7 +15,7 @@ namespace plaza.Models
         public string Phone { get; set; } = null!;
         public string? Comment { get; set; }
 
-        public Guid? ApartmentId { get; set; }       // nullable FK, ON DELETE SET NULL
+        public Guid? ApartmentId { get; set; }
         public Apartment? Apartment { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; }

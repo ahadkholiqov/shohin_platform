@@ -47,7 +47,6 @@ export default function AdminLayout() {
 
   const activeTitle = NAV.find((n) => (n.end ? location.pathname === n.to : location.pathname.startsWith(n.to)))?.title ?? 'Админ'
 
-  // Quietly load the count of new leads for the sidebar badge.
   useEffect(() => {
     let cancelled = false
     api
@@ -56,14 +55,12 @@ export default function AdminLayout() {
         if (!cancelled) setNewLeads(items.length)
       })
       .catch(() => {
-        /* badge is best-effort; ignore errors */
       })
     return () => {
       cancelled = true
     }
   }, [location.pathname])
 
-  // Close the mobile drawer on navigation.
   useEffect(() => {
     setSidebarOpen(false)
   }, [location.pathname])
